@@ -1,0 +1,75 @@
+/* Styling for the Lecturer Form Card */
+.record-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    /* Slightly wider for the grid */
+    border-top: 6px solid #0055ff;
+}
+
+.card-header {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Two columns */
+    gap: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #003366;
+}
+
+/* Reusing your color specs */
+.btn-submit {
+    background-color: #0055ff;
+    color: white;
+}
+
+.btn-cancel {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-clear {
+    background-color: #ffcc00;
+    color: #000;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(90%);
+}
+
+/* Dark Mode Implementation */
+.dark-mode {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.dark-mode .record-card {
+    background-color: #2d2d2d;
+    border-top-color: #ffcc00;
+    /* Yellow accent for dark mode */
+}
+
+.dark-mode .input-group label {
+    color: #ffcc00;
+}
+
+.dark-mode input,
+.dark-mode select {
+    background: #444;
+    color: white;
+    border: 1px solid #555;
+}

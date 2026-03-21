@@ -1,0 +1,96 @@
+<?php
+session_start();
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: /review-system/admin.php");
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Review System</title>
+    <link rel="stylesheet" href="review.css">
+</head>
+
+<body class="admin-body">
+
+    <header class="main-header">
+        <div class="logo">🛡️ AdminLog</div>
+        <h1>Lecturer Review</h1>
+        <button id="theme-toggle" class="mode-btn" onclick="toggleMode()">🌓 Switch Mode</button>
+    </header>
+
+    <div class="container">
+        <!-- The Minimalist Card -->
+        <div class="record-card">
+            <div class="card-header">
+                <h2>Lecturer Record Entry</h2>
+                <p>Enter details for the current semester</p>
+            </div>
+
+            <form action="save_lecturer.php" method="POST" id="lecturerForm">
+
+                <div class="form-grid">
+                    <!-- Lecturer Name -->
+                    <div class="input-group">
+                        <label>Lecturer Name</label>
+                        <input type="text" name="lect_name" placeholder="e.g. Dr. Smith" required>
+                    </div>
+
+                    <!-- Faculty -->
+                    <div class="input-group">
+                        <label>Faculty</label>
+                        <select name="faculty" required>
+                            <option value="">Select Faculty</option>
+                            <option value="Science">Science</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Business">Business</option>
+                        </select>
+                    </div>
+
+                    <!-- Arrival Time -->
+                    <div class="input-group">
+                        <label>Arrival Time</label>
+                        <input type="time" name="arrival_time" required>
+                    </div>
+
+                    <!-- Departure Time -->
+                    <div class="input-group">
+                        <label>Departure Time</label>
+                        <input type="time" name="departure_time" required>
+                    </div>
+
+                    <!-- Number of Courses -->
+                    <div class="input-group">
+                        <label>Number of Courses</label>
+                        <input type="number" name="num_courses" min="1" placeholder="0" required>
+                    </div>
+
+                    <!-- Courses Covered -->
+                    <div class="input-group">
+                        <label>Courses Covered (Sem)</label>
+                        <input type="number" name="courses_covered" min="0" placeholder="0" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-submit" onclick="return confirm('Confirm data entry?')">Submit</button>
+                    <button type="button" class="btn btn-cancel" onclick="window.history.back()">Cancel</button>
+                    <button type="reset" class="btn btn-clear">Clear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+
+</html>
