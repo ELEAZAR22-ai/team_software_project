@@ -15,15 +15,27 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     <link rel="stylesheet" href="review.css">
 </head>
 
-<body class="admin-body">
+<body>
 
     <header class="main-header">
-        <div class="logo">🛡️ AdminLog</div>
+        <div class="logo">
+            <img src="log.png" alt="Logo" class="logo-image">
+            <span>Pentecost University</span>
+        </div>
         <h1>Lecturer Review</h1>
         <button id="theme-toggle" class="mode-btn" onclick="toggleMode()">🌓 Switch Mode</button>
     </header>
 
     <div class="container">
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="message success"><?php echo $_SESSION['success'];
+                                            unset($_SESSION['success']); ?></div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="message error"><?php echo $_SESSION['error'];
+                                        unset($_SESSION['error']); ?></div>
+        <?php endif; ?>
         <!-- The Minimalist Card -->
         <div class="record-card">
             <div class="card-header">
@@ -31,13 +43,13 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 <p>Enter details for the current semester</p>
             </div>
 
-            <form action="save_lecturer.php" method="POST" id="lecturerForm">
-
+            <form action="adhandler.php" method="POST" id="lecturerForm">
+                <input type="hidden" name="record" value="1">
                 <div class="form-grid">
                     <!-- Lecturer Name -->
                     <div class="input-group">
                         <label>Lecturer Name</label>
-                        <input type="text" name="lect_name" placeholder="e.g. Dr. Smith" required>
+                        <input type="text" name="lecturer_name" placeholder="e.g. Mr. Harry" required>
                     </div>
 
                     <!-- Faculty -->
@@ -45,10 +57,10 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                         <label>Faculty</label>
                         <select name="faculty" required>
                             <option value="">Select Faculty</option>
-                            <option value="Science">Science</option>
-                            <option value="Arts">Arts</option>
-                            <option value="Engineering">Engineering</option>
-                            <option value="Business">Business</option>
+                            <option value="FESAC">FESAC</option>
+                            <option value="ABE">ABE</option>
+                            <option value="LAW">LAW</option>
+                            <option value="FBA">FBA</option>
                         </select>
                     </div>
 

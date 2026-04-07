@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Kimberth Bus — Ticket Booking</title>
+    <style>
+        :root {
+            --primary: #e11d48;
+            --accent: #ef4444;
+            --muted: #6b7280;
+            --card: #fff;
+            --bg: #f3f4f6;
+            --seat-available: #10b981;
+            --seat-selected: #ef4444;
+            --seat-booked: #9ca3af;
+            --glass: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+            color: #111
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 28px auto;
+            padding: 18px
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 12px
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .hero {
+            background: linear-gradient(90deg, rgba(225, 29, 72, 0.06), rgba(225, 29, 72, 0.02));
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .hero .intro {
+            max-width: 760px
+        }
+
+        .hero h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #111
+        }
+
+        .hero p {
+            margin: 6px 0 0 0;
+            color: var(--muted)
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+            border: 1px solid rgba(2, 6, 23, 0.03)
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 18px;
+            margin-top: 16px
+        }
+
+        @media(max-width:880px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start
+            }
+
+            .hero {
+                padding: 12px
+            }
+        }
+
+        label {
+            display: block;
+            font-size: .85rem;
+            margin-bottom: 6px;
+            color: var(--muted)
+        }
+
+        input[type=text],
+        input[type=date],
+        select,
+        input[type=number],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            background: #fff
+        }
+
+        .row {
+            display: flex;
+            gap: 12px
+        }
+
+        .row .col {
+            flex: 1
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 0;
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform .12s, box-shadow .12s
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(225, 29, 72, 0.12)
+        }
+
+        .btn.ghost {
+            background: #fff;
+            color: #111;
+            border: 1px solid #e6e6e6
+        }
+
+        .bus-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .bus-option {
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+            cursor: pointer;
+            transition: all .12s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .bus-option.active {
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            color: #fff;
+            border-color: transparent;
+            transform: translateY(-3px)
+        }
+
+        .seat-map {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 12px;
+            background: linear-gradient(180deg, #fff, #fbfdff);
+            border-radius: 10px;
+            border: 1px solid rgba(2, 6, 23, 0.03)
+        }
+
+        .seat {
+            height: 44px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .95rem;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+            transition: transform .12s, box-shadow .12s
+        }
+
+        .seat.available {
+            background: var(--seat-available);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.12)
+        }
+
+        .seat.selected {
+            background: var(--seat-selected);
+            color: #fff;
+            transform: scale(1.04);
+            box-shadow: 0 8px 26px rgba(239, 68, 68, 0.14)
+        }
+
+        .seat.booked {
+            background: var(--seat-booked);
+            color: #fff;
+            cursor: not-allowed;
+            opacity: .95
+        }
+
+        .legend {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 10px;
+            font-size: .9rem;
+            color: var(--muted)
+        }
+
+        .summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eef2f7;
+            text-align: left
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 6, 23, .5);
+            z-index: 60;
+            -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(2px)
+        }
+
+        .modal.open {
+            display: flex
+        }
+
+        .modal .box {
+            width: 94%;
+            max-width: 560px;
+            background: var(--card);
+            padding: 18px;
+            border-radius: 12px
+        }
+
+        .small {
+            font-size: .85rem;
+            color: var(--muted)
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 600
+        }
+
+        .receipt .row {
+            display: flex;
+            justify-content: space-between
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <h1>Kimberth Bus <span class="small">— Safe. Comfortable. On time.</span></h1>
+            <div style="display:flex;gap:12px;align-items:center">
+                <div class="badge">Top Routes</div>
+                <div class="small">Local demo · stores bookings in browser</div>
+            </div>
+        </header>
+
+        <section class="hero card">
+            <div class="intro">
+                <h2>Travel smarter — book seats on premium intercity routes</h2>
+                <p>Choose route, travel date, class and seats. Get a digital receipt and maintain booking history for
+                    audits.</p>
+            </div>
+            <div style="min-width:260px;text-align:right">
+                <div class="small">Popular:</div>
+                <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
+                    <span class="bus-option">Accra - Kumasi</span>
+                    <span class="bus-option">Tamale Express</span>
+                </div>
+            </div>
+        </section>
+
+        <main class="grid">
+            <form id="booking-form" class="card" onsubmit="event.preventDefault(); confirmBooking()">
+                <div class="row" style="margin-bottom:12px">
+                    <div class="col">
+                        <label for="passenger">Passenger name</label>
+                        <input id="passenger" type="text" placeholder="e.g. Kofi Mensah" required />
+                    </div>
+                    <div class="col">
+                        <label for="route">Route</label>
+                        <select id="route" required></select>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-bottom:12px">
+                    <div class="col">
+                        <label for="departure">Departure</label>
+                        <select id="departure" required></select>
+                    </div>
+                    <div class="col">
+                        <label for="destination">Destination</label>
+                        <select id="destination" required></select>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-bottom:12px">
+                    <div class="col">
+                        <label for="date">Travel date</label>
+                        <input id="date" type="date" required />
+                    </div>
+                    <div class="col">
+                        <label for="tickets">Passengers / Tickets</label>
+                        <input id="tickets" type="number" min="1" value="1" required />
+                    </div>
+                </div>
+
+                <div style="margin-top:6px">
+                    <label class="small">Bus class</label>
+                    <div id="class-options" class="bus-options" role="radiogroup" aria-label="Bus classes"></div>
+                </div>
+
+                <div style="margin-top:16px" class="card">
+                    <div style="display:flex;gap:18px;align-items:flex-start">
+                        <div style="flex:1">
+                            <label class="small">Seat reservation (click to select)</label>
+                            <div id="seat-map" class="seat-map" role="grid" aria-label="Seat map"></div>
+                            <div class="legend">
+                                <div class="small"><span
+                                        style="display:inline-block;width:12px;height:12px;background:var(--seat-available);border-radius:3px;margin-right:6px"></span>Available
+                                </div>
+                                <div class="small"><span
+                                        style="display:inline-block;width:12px;height:12px;background:var(--seat-selected);border-radius:3px;margin-right:6px"></span>Selected
+                                </div>
+                                <div class="small"><span
+                                        style="display:inline-block;width:12px;height:12px;background:var(--seat-booked);border-radius:3px;margin-right:6px"></span>Booked
+                                </div>
+                            </div>
+                        </div>
+
+                        <aside style="width:320px">
+                            <div class="summary">
+                                <div><strong>Summary</strong></div>
+                                <div class="small">Route: <span id="sum-route">N/A</span></div>
+                                <div class="small">Departure: <span id="sum-dep">N/A</span></div>
+                                <div class="small">Destination: <span id="sum-dest">N/A</span></div>
+                                <div class="small">Date: <span id="sum-date">N/A</span></div>
+                                <div class="small">Class: <span id="sum-class">Standard</span></div>
+                                <div class="small">Tickets: <span id="sum-tickets">1</span></div>
+                                <div class="small">Seats: <span id="sum-seats">—</span></div>
+                                <div class="small">Fare / ticket: <span id="sum-fare">GHS 0.00</span></div>
+                                <div style="border-top:1px solid #eef2f7;padding-top:10px">
+                                    <div class="small">Total</div>
+                                    <div id="sum-total" style="font-weight:700;font-size:1.3rem;color:var(--primary)">
+                                        GHS 0.00</div>
+                                </div>
+                                <div style="display:flex;gap:8px;margin-top:12px">
+                                    <button type="button" class="btn ghost" onclick="resetForm()">Reset</button>
+                                    <button id="confirm-btn" type="submit" class="btn" style="flex:1;">Confirm &
+                                        Pay</button>
+                                </div>
+                                <button id="pay-btn" type="button" class="btn"
+                                    style="width:100%;margin-top:10px;display:none" onclick="simulatePay()">Simulate
+                                    Payment</button>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </form>
+
+            <section class="card" aria-live="polite">
+                <h3 style="margin-top:0">Available routes & fares</h3>
+                <div id="routes-list" style="display:grid;gap:8px;margin-top:8px"></div>
+
+                <h3 style="margin-top:14px">Booking history</h3>
+                <div style="overflow:auto">
+                    <table aria-label="Booking history" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Ticket No</th>
+                                <th>Passenger</th>
+                                <th>Route</th>
+                                <th>Seats</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body"></tbody>
+                    </table>
+                    <p id="history-empty" class="small" style="text-align:center;margin:12px 0">No bookings yet.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal(event)">
+        <div class="box" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
+            <div id="modal-content"></div>
+            <div style="margin-top:12px;text-align:right">
+                <button class="btn ghost" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const ROUTES = [
+            { name: 'Accra - Kumasi', departure: 'Accra Central', destination: 'Kumasi Kejetia', baseFare: 80.0 },
+            { name: 'Tema - Takoradi', departure: 'Tema Lorry Station', destination: 'Takoradi Market', baseFare: 95.0 },
+            { name: 'Tamale Express', departure: 'Tamale Main', destination: 'Accra Central', baseFare: 150.0 }
+        ];
+        const CLASSES = { Standard: 1.0, Executive: 1.25, VIP: 1.5 };
+        const ROWS = 8, COLS = 4;
+        // initial layout (A available), can be extended
+        const defaultLayout = Array.from({ length: ROWS }).map(() => Array.from({ length: COLS }, () => 'A'));
+
+        // persistence keys
+        const BOOKINGS_KEY = 'kb_bookings_v1';
+        const BOOKED_SEATS_KEY = 'kb_booked_seats_v1';
+
+        let selectedSeats = [];
+        let currentClass = 'Standard';
+        let bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+        let bookedSeats = JSON.parse(localStorage.getItem(BOOKED_SEATS_KEY) || '{}'); // { tripKey: [ids] }
+
+        // UI refs
+        const routeEl = document.getElementById('route');
+        const departureEl = document.getElementById('departure');
+        const destinationEl = document.getElementById('destination');
+        const dateEl = document.getElementById('date');
+        const ticketsEl = document.getElementById('tickets');
+        const classOptionsEl = document.getElementById('class-options');
+        const seatMapEl = document.getElementById('seat-map');
+        const sumRoute = document.getElementById('sum-route');
+        const sumDep = document.getElementById('sum-dep');
+        const sumDest = document.getElementById('sum-dest');
+        const sumDate = document.getElementById('sum-date');
+        const sumClass = document.getElementById('sum-class');
+        const sumTickets = document.getElementById('sum-tickets');
+        const sumSeats = document.getElementById('sum-seats');
+        const sumFare = document.getElementById('sum-fare');
+        const sumTotal = document.getElementById('sum-total');
+        const historyBody = document.getElementById('history-body');
+        const historyEmpty = document.getElementById('history-empty');
+        const routesList = document.getElementById('routes-list');
+
+        function init() {
+            populateRouteOptions();
+            populateClassOptions();
+            renderRoutesOverview();
+            renderSeatMap();
+            dateEl.value = new Date().toISOString().slice(0, 10);
+            ticketsEl.addEventListener('input', onTicketsChange);
+            routeEl.addEventListener('change', onRouteChange);
+            departureEl.addEventListener('change', updateSummary);
+            destinationEl.addEventListener('change', updateSummary);
+            dateEl.addEventListener('change', onDateChange);
+            renderHistory();
+            updateSummary();
+        }
+
+        function populateRouteOptions() {
+            routeEl.innerHTML = '<option value="">Select route</option>';
+            departureEl.innerHTML = '<option value="">Select departure</option>';
+            destinationEl.innerHTML = '<option value="">Select destination</option>';
+            ROUTES.forEach((r, i) => {
+                const opt = document.createElement('option'); opt.value = r.name; opt.textContent = r.name;
+                routeEl.appendChild(opt);
+                // populate unique departures/destinations
+                const dopt = document.createElement('option'); dopt.value = r.departure; dopt.textContent = r.departure;
+                const dost = document.createElement('option'); dost.value = r.destination; dost.textContent = r.destination;
+                // avoid duplicates
+                if (!Array.from(departureEl.options).some(o => o.value === r.departure)) departureEl.appendChild(dopt);
+                if (!Array.from(destinationEl.options).some(o => o.value === r.destination)) destinationEl.appendChild(dost);
+            });
+            if (ROUTES[0]) {
+                routeEl.value = ROUTES[0].name;
+                onRouteChange();
+            }
+        }
+
+        function populateClassOptions() {
+            classOptionsEl.innerHTML = '';
+            Object.keys(CLASSES).forEach(cls => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'bus-option' + (cls === currentClass ? ' active' : '');
+                btn.textContent = cls;
+                btn.onclick = () => { currentClass = cls; document.querySelectorAll('.bus-option').forEach(n => n.classList.remove('active')); btn.classList.add('active'); updateSummary(); renderSeatMap(); };
+                classOptionsEl.appendChild(btn);
+            });
+        }
+
+        function renderRoutesOverview() {
+            routesList.innerHTML = ROUTES.map(r => `<div class="card" style="padding:10px;display:flex;justify-content:space-between;align-items:center">
+        <div><strong>${r.name}</strong><div class="small" style="margin-top:6px">${r.departure} → ${r.destination}</div></div>
+        <div style="text-align:right"><div style="font-weight:700;color:var(--primary)">GHS ${r.baseFare.toFixed(2)}</div><div class="small">base fare</div></div>
+      </div>`).join('');
+        }
+
+        function tripKey(routeName, dateVal, cls) {
+            return `${routeName}||${dateVal}||${cls}`;
+        }
+
+        function renderSeatMap() {
+            seatMapEl.innerHTML = '';
+            // compute booked seats for selected trip
+            const key = tripKey(routeEl.value, dateEl.value, currentClass);
+            const bookedForTrip = (bookedSeats[key] || []).slice();
+            let counter = 1;
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const id = `${r}_${c}`;
+                    const cell = document.createElement('div');
+                    cell.className = 'seat';
+                    cell.dataset.id = id;
+                    if (bookedForTrip.includes(id)) {
+                        cell.classList.add('booked'); cell.textContent = 'X'; cell.setAttribute('aria-disabled', 'true');
+                    } else {
+                        // available
+                        cell.classList.add(selectedSeats.includes(id) ? 'selected' : 'available');
+                        cell.textContent = counter++;
+                        cell.tabIndex = 0;
+                        cell.onclick = () => toggleSeat(id, cell);
+                        cell.onkeydown = (e) => { if (e.key === 'Enter') toggleSeat(id, cell); };
+                    }
+                    seatMapEl.appendChild(cell);
+                }
+            }
+            updateSummary();
+        }
+
+        function toggleSeat(id, el) {
+            const ticketCount = Number(ticketsEl.value) || 1;
+            // ignore if booked
+            if (el.classList.contains('booked')) return;
+            if (selectedSeats.includes(id)) {
+                selectedSeats = selectedSeats.filter(s => s !== id);
+            } else {
+                if (selectedSeats.length >= ticketCount) {
+                    alert(`You may only select ${ticketCount} seat(s). Deselect one first.`);
+                    return;
+                }
+                selectedSeats.push(id);
+            }
+            renderSeatMap();
+        }
+
+        function getSelectedRouteObj() { return ROUTES.find(r => r.name === routeEl.value) || null; }
+        function farePerTicket() {
+            const r = getSelectedRouteObj(); if (!r) return 0;
+            return r.baseFare * (CLASSES[currentClass] || 1);
+        }
+
+        function updateSummary() {
+            sumRoute.textContent = routeEl.value || 'N/A';
+            sumDep.textContent = departureEl.value || (getSelectedRouteObj() ? getSelectedRouteObj().departure : 'N/A');
+            sumDest.textContent = destinationEl.value || (getSelectedRouteObj() ? getSelectedRouteObj().destination : 'N/A');
+            sumDate.textContent = dateEl.value || 'N/A';
+            sumClass.textContent = currentClass;
+            const tickets = Number(ticketsEl.value) || 1;
+            sumTickets.textContent = tickets;
+            sumSeats.textContent = selectedSeats.length ? selectedSeats.map(s => seatLabel(s)).join(', ') : '—';
+            const fare = farePerTicket();
+            sumFare.textContent = `GHS ${fare.toFixed(2)}`;
+            const total = fare * selectedSeats.length;
+            sumTotal.textContent = `GHS ${total.toFixed(2)}`;
+            // disable confirm unless valid
+            const confirmBtn = document.getElementById('confirm-btn');
+            confirmBtn.disabled = !(document.getElementById('passenger').value.trim() && routeEl.value && selectedSeats.length === tickets);
+        }
+
+        function seatLabel(id) {
+            const [r, c] = id.split('_').map(Number);
+            return String.fromCharCode(65 + r) + (c + 1);
+        }
+
+        function onTicketsChange() {
+            const ticketCount = Number(ticketsEl.value) || 1;
+            while (selectedSeats.length > ticketCount) selectedSeats.pop();
+            renderSeatMap();
+        }
+
+        function onRouteChange() {
+            const sel = getSelectedRouteObj();
+            if (sel) {
+                departureEl.value = sel.departure;
+                destinationEl.value = sel.destination;
+            }
+            selectedSeats = [];
+            renderSeatMap();
+            updateSummary();
+        }
+
+        function onDateChange() {
+            selectedSeats = [];
+            renderSeatMap();
+        }
+
+        function confirmBooking() {
+            // validation
+            const passenger = document.getElementById('passenger').value.trim();
+            if (!passenger) { alert('Enter passenger name.'); return; }
+            if (!routeEl.value) { alert('Select a route.'); return; }
+            const tickets = Number(ticketsEl.value) || 1;
+            if (selectedSeats.length !== tickets) { alert(`Select exactly ${tickets} seat(s).`); return; }
+
+            // show confirmation modal
+            const fare = farePerTicket(); const total = (fare * selectedSeats.length).toFixed(2);
+            const html = `<p><strong>Passenger:</strong> ${passenger}</p>
+        <p><strong>Route:</strong> ${routeEl.value}</p>
+        <p><strong>Date:</strong> ${dateEl.value}</p>
+        <p><strong>Class:</strong> ${currentClass}</p>
+        <p><strong>Seats:</strong> ${selectedSeats.map(seatLabel).join(', ')}</p>
+        <p style="margin-top:8px"><strong>Total:</strong> GHS ${total}</p>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn ghost" onclick="closeModal()">Cancel</button>
+          <button class="btn" onclick="completeBooking()">Proceed to Payment</button>
+        </div>`;
+            showModal('Confirm booking', html);
+        }
+
+        function completeBooking() {
+            // simulate payment success and store booking
+            const passenger = document.getElementById('passenger').value.trim();
+            const ticketNo = 'KBT-' + Math.floor(100000 + Math.random() * 900000);
+            const total = (farePerTicket() * selectedSeats.length).toFixed(2);
+            const record = {
+                id: Date.now(),
+                ticketNo,
+                passenger,
+                route: routeEl.value,
+                departure: departureEl.value,
+                destination: destinationEl.value,
+                date: dateEl.value,
+                cls: currentClass,
+                seats: selectedSeats.map(seatLabel),
+                seatIds: selectedSeats.slice(),
+                total,
+                time: new Date().toLocaleString()
+            };
+            bookings.unshift(record);
+            localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
+
+            // mark seats as booked for this trip key
+            const key = tripKey(routeEl.value, dateEl.value, currentClass);
+            bookedSeats[key] = (bookedSeats[key] || []).concat(selectedSeats);
+            localStorage.setItem(BOOKED_SEATS_KEY, JSON.stringify(bookedSeats));
+
+            closeModal();
+            renderSeatMap();
+            selectedSeats = [];
+            updateSummary();
+            renderHistory();
+
+            // show digital receipt
+            const receipt = `<div class="receipt">
+        <h3 style="margin-top:0">Booking successful</h3>
+        <div class="row"><div>Ticket #</div><div><strong>${record.ticketNo}</strong></div></div>
+        <div class="row"><div>Passenger</div><div>${record.passenger}</div></div>
+        <div class="row"><div>Route</div><div>${record.route}</div></div>
+        <div class="row"><div>Seats</div><div>${record.seats.join(', ')}</div></div>
+        <div class="row"><div>Total Paid</div><div>GHS ${record.total}</div></div>
+        <div class="row small"><div>Time</div><div>${record.time}</div></div>
+      </div>`;
+            showModal('Digital Receipt', receipt);
+        }
+
+        function simulatePay() { confirmBooking(); }
+
+        function renderHistory() {
+            historyBody.innerHTML = bookings.map(b => `
+        <tr>
+          <td>${b.ticketNo}</td>
+          <td>${b.passenger}</td>
+          <td>${b.route}</td>
+          <td>${b.seats.join(', ')}</td>
+          <td>GHS ${b.total}</td>
+          <td>${b.date}</td>
+        </tr>
+      `).join('');
+            historyEmpty.style.display = bookings.length ? 'none' : 'block';
+        }
+
+        function resetForm() {
+            document.getElementById('booking-form').reset();
+            currentClass = 'Standard';
+            document.querySelectorAll('.bus-option').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.bus-option')[0]?.classList.add('active');
+            selectedSeats = [];
+            ticketsEl.value = 1;
+            dateEl.value = new Date().toISOString().slice(0, 10);
+            renderSeatMap();
+            updateSummary();
+        }
+
+        // modal helpers
+        function showModal(title, bodyHtml) {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `<h3 style="margin:0 0 8px 0">${title}</h3>` + bodyHtml;
+            modal.classList.add('open');
+        }
+        function closeModal(evt) {
+            if (evt && evt.target && evt.target.id !== 'modal') return;
+            document.getElementById('modal').classList.remove('open');
+        }
+
+        // init app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

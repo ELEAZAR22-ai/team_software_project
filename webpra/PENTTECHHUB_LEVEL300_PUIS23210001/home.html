@@ -1,0 +1,67 @@
+<!DOCTYPE HTML5>
+
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device, initial-scale = 1" />
+
+<head>
+    <title>pentech hub</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+    <div class="head">
+        <h1><b>INNOVATION AND TECHNOLGY HUD</b></h1>
+        <nav>
+            <a href="home.html">HOME</a>
+            <a href="about.html">ABOUT</a>
+            <a href="gallery.html">GALLERY</a>
+            <a href="contact.html">CONTACTS</a>
+            <a href="schedule.html">SCHEDULES</a>
+            <a href="speakers.html">SPEAKERS</a>
+            <span></span>
+        </nav>
+    </div>
+    <img src="ang.jpg" />
+
+
+    <section id="home" class="hero">
+        <div class="container">
+
+            <div id="countdown" aria-live="polite" style="font-weight:600; font-size:1.25rem; margin: 1rem 0;">
+                Loading countdown...
+            </div>
+            <h2> REGISTER TO COUNT YOURSELF APART OF THE COMMUNITY......</h2>
+            <a href="register.html" class="btn-primary">REGISTER NOW....</a>
+        </div>
+    </section>
+    <script>
+
+        const targetDate = new Date("2025-12-31T23:59:59").getTime();
+
+        const countdownEl = document.getElementById("countdown");
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                countdownEl.textContent = "Launch started or event occurred!";
+                clearInterval(timer);
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            countdownEl.textContent = `Launch in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        updateCountdown();
+        const timer = setInterval(updateCountdown, 1000);
+    </script>
+</body>
+
+</html>

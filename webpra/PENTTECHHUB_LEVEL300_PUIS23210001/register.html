@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device, initial-scale=1">
+
+<head>
+    <title>register</title>
+
+    <style>
+        .head {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: none;
+
+
+        }
+
+        h1 {
+            align-items: center;
+            text-align: center;
+
+        }
+
+
+        nav {
+            height: 50px;
+            width: 1000px;
+            align-items: center;
+            align-content: center;
+            margin-top: none;
+            position: relative;
+            display: flex;
+
+        }
+
+        nav a {
+            align-items: center;
+            margin-left: 5px;
+            position: relative;
+            display: inline-block;
+            font-size: 1em;
+            font-weight: 500;
+            color: darkmagenta;
+            padding: 20px;
+            z-index: 1;
+
+        }
+
+        nav span {
+
+            transition: 2s;
+            border-radius: 20px;
+            width: 90px;
+            height: 40px;
+            background: linear-gradient(-50deg, #4f1918, #ff3332);
+            position: fixed;
+        }
+
+
+        nav a:nth-child(1):hover~span {
+            left: none;
+
+        }
+
+        nav a:nth-child(2):hover~span {
+            left: 95px;
+            width: 100px;
+        }
+
+        nav a:nth-child(3):hover~span {
+            left: 210px;
+            width: 100px;
+        }
+
+        nav a:nth-child(4):hover~span {
+            left: 335px;
+            width: 100px;
+        }
+
+        nav a:nth-child(5):hover~span {
+            left: 465;
+            width: 100px;
+        }
+
+        nav a:nth-child(6):hover~span {
+            left: 598;
+            width: 100px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            background-color: rgba(204, 35, 23, 0.133);
+            padding: 150px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: wheat;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="head">
+        <h1><b>INNOVATION AND TECHNOLGY HUD</b></h1>
+        <nav>
+            <a href="home.html">HOME</a>
+            <a href="about.html">ABOUT</a>
+            <a href="gallery.html">GALLERY</a>
+            <a href="contact.html">CONTACTS</a>
+            <a href="schedule.html">SCHEDULES</a>
+            <a href="speakers.html">SPEAKERS</a>
+            <span></span>
+        </nav>
+    </div>
+    <form>
+        <div class="container">
+            <h2>
+                <marquee>REGISTER YOUR DETAILS BELOW TO COUNT YOURSELF APART OF THE COMMUNITY.....</marquee>
+            </h2>
+            <label>
+                FULL NAME:
+                <input type="text" requred />
+            </label>
+            <label>
+                E-mail:
+                <input type="text" required />
+            </label>
+            <label>
+                ORGANIZATION:
+                <input type="text" required />
+            </label>
+            <label>
+                AREA OF INTEREST:
+                <select>
+                    <option>AI</option>
+                    <option>WEB</option>
+                    <option>ANALYSIS</option>
+                    <option>DEVELOPMENT</option>
+                    <option>CYBERSECURITY</option>
+                </select>
+            </label>
+            <label>
+                ATTENDANCE TYPE:
+                <input type="radio" name="attendance" value="physical" />PHYSICAL
+                <input type="radio" name="attendance" value="virtual" />VIRTUAL
+            </label>
+            <label>
+                PHONE NUMBER:
+                <input type="tel" required />
+            </label>
+            <label>
+                ADDITIONAL COMMENTS:<br>
+                <textarea rows="4" cols="50" placeholder="Your comments here..."></textarea>
+            </label>
+            <label>
+                <B>REGISTER NOW:</B>
+                <button input text type="submit">SUBMIT</button>
+            </label>
+        </div>
+    </form>
+</body>
+
+
+</html>

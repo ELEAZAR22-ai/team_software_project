@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Countdown Timer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .slideshow {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .slides {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            margin: 0;
+            padding: 0;
+            /* ensure the image fits nicely */
+        }
+
+        .slide img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, .5);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 0.9rem;
+            cursor: pointer;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }
+
+        .dots button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, .6);
+            cursor: pointer;
+        }
+
+        .dots button.active {
+            background: #fff;
+        }
+
+        @media (hover: none) {
+            .nav {
+                /* improve touch targets on touch devices */
+                padding: 0.8rem 1rem;
+            }
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 8px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .event-info {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px 15px;
+            min-width: 120px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .countdown-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .event-details {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .event-details h2 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .event-details p {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .completed {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 30px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .countdown-item {
+                min-width: 80px;
+                padding: 15px 10px;
+            }
+
+            .countdown-number {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slideshow" aria-label="Image slideshow">
+        <div class="slides" id="slides">
+            <figure class="slide active" aria-roledescription="slide" aria-label="Slide 1">
+                <img src="in.png" alt="Description of image 1" />
+            </figure>
+            <figure class="slide" aria-roledescription="slide" aria-label="Slide 2">
+                <img src="e.webp" alt="Description of image 2" />
+            </figure>
+            <figure class="slide" aria-roledescription="slide" aria-label="Slide 3">
+                <img src="ang.jpg" alt="Description of image 3" />
+            </figure>
+            <!-- add more slides as needed -->
+        </div>
+
+        <button class="nav prev" aria-label="Previous slide" id="prevBtn">Prev</button>
+        <button class="nav next" aria-label="Next slide" id="nextBtn">Next</button>
+
+        <div class="dots" id="dots" aria-label="Slide indicators" role="navigation">
+            <!-- dots will be generated by JS -->
+        </div>
+    </div>
+    <div class="container">
+        <h1>Annual Tech Conference 2024</h1>
+        <p class="event-info">Join us for an amazing event!</p>
+
+        <div class="countdown">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+        <script>
+            (function () { });
+            const slidesContainer = document.getElementById('slides');
+            const slides = slidesContainer.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('dots');
+
+
+            let current = 0;
+            const total = slides.length;
+            const intervalMs = 4000; // 4 seconds, change as needed  
+            let timer;
+
+
+            function show(index) {
+                // wrap index  
+                current = (index + total) % total;
+                const offset = -current * 100;
+                slidesContainer.style.transform = `translateX(${offset}%)`;
+
+                // update dots  
+                const dotButtons = dotsContainer.querySelectorAll('button');
+                dotButtons.forEach((btn, i) => btn.classList.toggle('active', i === current));
+
+                // accessibility: announce slide  
+                slides[current].setAttribute('aria-selected', 'true');
+            }
+
+            function next() { show(current + 1); }
+            function prev() { show(current - 1); }
+
+            // create dots  
+
+            <div class="event-details">
+                <h2>Event Information</h2>
+                <p><strong>Date:</strong> Decemder 15, 2025</p>
+                <p><strong>Time:</strong> 9:00 AM - 6:00 PM</p>
+                <p><strong>Location:</strong> Convention Center, Downtown</p>
+                <p><strong>Description:</strong> Join industry leaders for a day of innovation, networking, and cutting-edge
+                    technology presentations.</p>
+            </div>
+
+        </script>
+
+        <script>
+
+
+            // Set the date we're counting down to
+            const countDownDate = new Date("Dec 15, 2025 09:00:00").getTime();
+
+            // Update the countdown every 1 second
+            const countdownFunction = setInterval(function () {
+                // Get today's date and time
+                const now = new Date().getTime();
+
+                // Find the distance between now and the countdown date
+                const distance = countDownDate - now;
+
+                // If the countdown is over, display a message
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    document.querySelector(".countdown").innerHTML = '<div class="completed">Event Started!</div>';
+                    return;
+                }
+
+                // Time calculations for days, hours, minutes and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the results
+                document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+                document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+            }, 1000);
+        </script>
+</body>
+
+</html>

@@ -15,7 +15,7 @@
         <div class="logo"> <img src="log.png" alt="Logo" class="logo-image">
             Pentecost University</div>
         <h1>Review System</h1>
-        <button id="theme-toggle" class="mode-btn">🌓 Switch Mode</button>
+        <button id="theme-toggle" class="mode-btn" onclick="toggleMode()">🌓 Switch Mode</button>
     </header>
 
     <div class="container">
@@ -73,11 +73,9 @@
         });
 
         // Theme Toggle
-        const themeToggle = document.querySelector('#theme-toggle');
-        themeToggle.addEventListener('click', function() {
+        function toggleMode() {
             document.body.classList.toggle('dark');
-            this.textContent = document.body.classList.contains('dark') ? '☀️ Light Mode' : '🌓 Switch Mode';
-        });
+        }
 
         // Submit Confirmation Popup
         function handleSubmit() {

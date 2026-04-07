@@ -1,0 +1,29 @@
+body{
+
+    height: height 100vh;
+    background-color: aquamarine;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+
+}
+      .holder
+      {
+        height: 70vh;
+        text-align: center;
+        background: beige;
+        padding: 20xp 10xp;
+         border-radius: 10xp;
+        box-shadow: 0 0 0 50px rgb(from color r g b);
+      }
+
+
+      .username
+      {
+        padding: 20xp;
+        border-radius: 10xp;
+
+
+      }
+

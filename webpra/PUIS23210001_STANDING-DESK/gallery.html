@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device, initial-scale=1">
+
+<head>
+    <title>gallery</title>
+    <style>
+        .head {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: none;
+
+
+        }
+
+        h1 {
+            align-items: center;
+            text-align: center;
+
+        }
+
+
+        nav {
+            height: 50px;
+            width: 1000px;
+            align-items: center;
+            align-content: center;
+            margin-top: none;
+            position: relative;
+            display: flex;
+
+        }
+
+        nav a {
+            align-items: center;
+            margin-left: 5px;
+            position: relative;
+            display: inline-block;
+            font-size: 1em;
+            font-weight: 500;
+            color: darkmagenta;
+            padding: 20px;
+            z-index: 1;
+
+        }
+
+        nav span {
+
+            transition: 2s;
+            border-radius: 20px;
+            width: 90px;
+            height: 40px;
+            background: linear-gradient(-50deg, #4f1918, #ff3332);
+            position: fixed;
+        }
+
+
+        nav a:nth-child(1):hover~span {
+            left: none;
+
+        }
+
+        nav a:nth-child(2):hover~span {
+            left: 95px;
+            width: 100px;
+        }
+
+        nav a:nth-child(3):hover~span {
+            left: 210px;
+            width: 100px;
+        }
+
+        nav a:nth-child(4):hover~span {
+            left: 335px;
+            width: 100px;
+        }
+
+        nav a:nth-child(5):hover~span {
+            left: 465;
+            width: 100px;
+        }
+
+        nav a:nth-child(6):hover~span {
+            left: 598;
+            width: 100px;
+        }
+
+        h2 {
+            text-align: center;
+            color: blueviolet;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px;
+        }
+
+        .gallery img {
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="head">
+        <h1><b>INNOVATION AND TECHNOLGY HUD</b></h1>
+        <nav>
+            <a href="home.html">HOME</a>
+            <a href="about.html">ABOUT</a>
+            <a href="gallery.html">GALLERY</a>
+            <a href="contact.html">CONTACTS</a>
+            <a href="schedule.html">SCHEDULES</a>
+            <a href="speakers.html">SPEAKERS</a>
+            <span></span>
+        </nav>
+    </div>
+    <h2>GALLERY....</h2>
+    <div class="gallery">
+        <img src="qq.jpg" width="300" height="200">
+        <img src="qw.jpg" width="300" height="200">
+        <img src="e.webp" width="300" height="200">
+        <img src="q.jpeg" width="300" height="200">
+        <img src="qr.jpg" width="300" height="200">
+        <img src="te.webp" width="300" height="200">
+        <img src="w.webp" width="300" height="200">
+        <img src="qt.jpg" width="300" height="200">
+        <img src="r.webp" width="300" height="200">
+        <img src="qe.jpg" width="300" height="200">
+    </div>
+</body>
+
+</html>

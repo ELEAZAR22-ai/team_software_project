@@ -1,0 +1,148 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    background-image: url('');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+}
+
+
+
+
+
+
+
+
+img {
+    height: 200px;
+    width: 200px;
+
+
+}
+
+.head {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 0;
+    text-align: none;
+
+
+}
+
+h1 {
+    align-items: center;
+    text-align: center;
+
+}
+
+
+nav {
+    height: 50px;
+    width: 1000px;
+    align-items: center;
+    align-content: center;
+    margin-top: none;
+    position: relative;
+    display: flex;
+}
+
+nav a {
+    align-items: center;
+    margin-left: 5px;
+    position: relative;
+    display: inline-block;
+    font-size: 1em;
+    font-weight: 500;
+    color: darkmagenta;
+    padding: 20px;
+    z-index: 1;
+    text-decoration: none;
+}
+
+nav span {
+
+    transition: 2s;
+    border-radius: 20px;
+    width: 90px;
+    height: 40px;
+    background: linear-gradient(-50deg, #4f1918, #ff3332);
+    position: fixed;
+}
+
+
+nav a:nth-child(1):hover~span {
+    left: none;
+
+}
+
+nav a:nth-child(2):hover~span {
+    left: 95px;
+    width: 100px;
+}
+
+nav a:nth-child(3):hover~span {
+    left: 210px;
+    width: 100px;
+}
+
+nav a:nth-child(4):hover~span {
+    left: 335px;
+    width: 100px;
+}
+
+nav a:nth-child(5):hover~span {
+    left: 465;
+    width: 100px;
+}
+
+nav a:nth-child(6):hover~span {
+    left: 598;
+    width: 100px;
+}
+
+
+:root {
+    --primary: #2b6cb0;
+    --bg: #f4f7fb;
+    --text: #1f2a37;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+div {
+    text-align: center;
+    margin: 1rem 0;
+    background-color: aqua;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.hero {
+    padding: 80px 0px;
+    text-align: center;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 1.2px 1.4px;
+    font-size: 1rem;
+    color: white;
+    background-color: #4CAF50;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+section {
+    padding: 60px 0;
+    text-align: center;
+}

@@ -43,3 +43,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comments'])) {
         exit;
     }
 }
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['record'])) {
+    $lecturer_name = $_POST["lecturer_name"];
+    $faculty = $_POST["faculty"];
+    $arrival_time = $_POST["arrival_time"];
+    $departure_time = $_POST["departure_time"];
+    $num_courses = $_POST["num_courses"];
+    $courses_covered = $_POST["courses_covered"];
+
+    if (!empty($lecturer_name) && !empty($faculty) && !empty($arrival_time) && !empty($departure_time) && !empty($num_courses) && !empty($courses_covered)) {
+        try {
+            require_once "dbho.php";
+            $query = "INSERT INTO record (lecturer_name, faculty, arrival_time, departure_time, num_courses, courses_covered) VALUES (?,?,?,?,?,?);";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$lecturer_name, $faculty, $arrival_time, $departure_time, $num_courses, $courses_covered]);
+            $pdo = null;
+            $stmt = null;
+            $_SESSION['success'] = "Record sent successfully!";
+            header("Location: /review-system/admin.php");
+            exit;
+        } catch (PDOException $e) {
+            die("Input Failed: " . $e->getMessage());
+        }
+    } else {
+        $_SESSION['error'] = "All Fields Must Be Filled!";
+        header("Location: /review-system/review.php");
+        exit;
+    }
+}

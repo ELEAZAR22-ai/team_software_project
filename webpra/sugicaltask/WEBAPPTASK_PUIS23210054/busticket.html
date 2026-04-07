@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kimberth Bus Ticketing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-color: #db981b;
+            --secondary-color: #104bb9;
+        }
+
+        .light {
+            --bg-color: #f9fafb;
+            --card-bg: #fff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+        }
+
+        .dark {
+            --bg-color: #1f2937;
+            --card-bg: #374151;
+            --text-color: #f9fafb;
+            --border-color: #4b5563;
+        }
+
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: .25s;
+            background-image: url(image/bu.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, .06);
+            border-radius: 12px;
+        }
+
+        .seat {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            margin: 4px;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: .12s;
+        }
+
+        .seat-available {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        .seat-selected {
+            background: var(--primary-color);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .seat-booked {
+            background: #9ca3af;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+
+        .seat-gangway {
+            width: 12px;
+            height: 32px;
+            margin: 4px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="min-h-screen flex flex-col">
+        <header class="bg-blue-600 shadow-xl">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="text-white text-3xl font-extrabold flex items-center">
+                    <i data-lucide="bus" class="w-8 h-8 mr-3"></i> Abbys Bus
+                </div>
+                <nav class="space-x-4 flex items-center">
+                    <button onclick="showPage('home')" class="text-red-100 hover:text-white font-medium">Home</button>
+                    <button onclick="showPage('booking')" class="text-red-100 hover:text-white font-medium">Book
+                        Now</button>
+                    <button onclick="showPage('history')"
+                        class="text-red-100 hover:text-white font-medium">History</button>
+                    <button id="theme-toggle" class="p-2 rounded-full text-red-100 hover:bg-red-700 ml-4"
+                        aria-label="Toggle theme">
+                        <i data-lucide="sun" id="theme-icon" class="w-5 h-5"></i>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <main class="flex-grow max-w-7xl mx-auto p-6 w-full">
+            <div id="home-page" class="page">
+                <div class="text-center py-12 card rounded-xl">
+                    <h1 class="text-4xl font-extrabold text-blue-600 mb-4">Happy and comfortable travelers
+                        choices
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8">Peace, Refreshing and confort travel through different
+                        settings.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+                        <div class="p-6 rounded-lg bg-red-50">
+                            <i data-lucide="map-pin" class="w-8 h-8 text-red-500 mb-2"></i>
+                            <h3 class="font-semibold text-lg">Top Routes</h3>
+                            <p class="text-sm">Temale - Kumasi, Accra - Takoradi, Tema Express.</p>
+                        </div>
+                        <div class="p-6 rounded-lg bg-red-50">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-red-500 mb-2"></i>
+                            <h3 class="font-semibold text-lg">VIP Comfort</h3>
+                            <p class="text-sm">Lunch arrangemennt, Wi‑Fi, and Free netflix login.</p>
+                        </div>
+                        <div class="p-6 rounded-lg bg-red-50">
+                            <i data-lucide="wallet" class="w-8 h-8 text-red-500 mb-2"></i>
+                            <h3 class="font-semibold text-lg">Easy Payment</h3>
+                            <p class="text-sm">Secure online booking payment.</p>
+                        </div>
+                    </div>
+                    <button onclick="showPage('booking')"
+                        class="mt-8 bg-red-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-red-700">Start
+                        Booking <i data-lucide="arrow-right" class="w-4 h-4 ml-2 inline-block"></i></button>
+                </div>
+            </div>
+
+            <div id="booking-page" class="page hidden">
+                <h2 class="text-3xl font-bold mb-6 text-red-600">Book Your Seat</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <section class="lg:col-span-2 p-6 rounded-xl card space-y-6">
+                        <h3 class="text-2xl font-semibold mb-4 border-b pb-2">Travel Details</h3>
+                        <form id="booking-form" onsubmit="event.preventDefault(); handleBookingConfirmation();">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="passenger-name" class="block text-sm font-medium mb-1">Passenger
+                                        Name</label>
+                                    <input type="text" id="passenger-name" placeholder="E.g., Kofi Mensah" required
+                                        class="w-full p-3 border rounded-lg focus:ring-red-500" />
+                                </div>
+                                <div>
+                                    <label for="route-select" class="block text-sm font-medium mb-1">Select
+                                        Route</label>
+                                    <select id="route-select" onchange="updateFares()" required
+                                        class="w-full p-3 border rounded-lg appearance-none">
+                                        <option value=""> Route</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="departure-select"
+                                        class="block text-sm font-medium mb-1">Departure</label>
+                                    <select id="departure-select" onchange="updateFares()" required
+                                        class="w-full p-3 border rounded-lg appearance-none">
+                                        <option value=""> Departure</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="destination-select"
+                                        class="block text-sm font-medium mb-1">Destination</label>
+                                    <select id="destination-select" onchange="updateFares()" required
+                                        class="w-full p-3 border rounded-lg appearance-none">
+                                        <option value=""> Destination</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="date-input" class="block text-sm font-medium mb-1">Travel Date</label>
+                                    <input type="date" id="date-input" required class="w-full p-3 border rounded-lg" />
+                                </div>
+                                <div>
+                                    <label for="tickets-input" class="block text-sm font-medium mb-1">Number of
+                                        Tickets</label>
+                                    <input type="number" id="tickets-input" min="1" value="1" oninput="updateSummary()"
+                                        required class="w-full p-3 border rounded-lg" />
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    <label class="block text-sm font-medium mb-1">Bus Class</label>
+                                    <div id="bus-options" class="flex flex-wrap gap-4 mt-2"></div>
+                                </div>
+
+                                <div class="col-span-1 md:col-span-2 p-4 border rounded-lg bg-gray-50">
+                                    <h4 class="text-lg font-semibold mb-3"> Select seat (Max <span
+                                            id="max-seats-info">1</span>)</h4>
+                                    <div id="seat-map" class="flex flex-col items-center">
+                                        <div id="driver-info"
+                                            class="p-2 w-16 text-center text-sm font-medium bg-gray-200 rounded-t-lg">
+                                            Driver</div>
+                                        <div id="bus-layout" class="grid gap-2 p-4 bg-gray-300 rounded-b-xl"
+                                            style="grid-template-columns: repeat(4, 1fr);"></div>
+                                    </div>
+                                    <div id="seat-availability-chart" class="mt-4 text-sm text-center"></div>
+                                    <p id="seat-selection-error" class="text-red-500 text-sm mt-2 text-center hidden">
+                                        Please select the number of seats.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end space-x-4 mt-6">
+                                <button type="button" onclick="resetForm()"
+                                    class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-bold">Reset/Clear
+                                    Form</button>
+                                <button type="submit"
+                                    class="bg-red-600 text-white px-6 py-3 rounded-lg font-bold">Confirm
+                                    Booking</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="lg:col-span-1 p-6 rounded-xl card space-y-6">
+                        <h3 class="text-2xl font-semibold mb-4 border-b pb-2">Booking Summary</h3>
+                        <div id="summary-details" class="space-y-3 text-sm">
+                            <p><strong>Route:</strong> <span id="sum-route">N/A</span></p>
+                            <p><strong>Date:</strong> <span id="sum-date">N/A</span></p>
+                            <p><strong>Class:</strong> <span id="sum-class">N/A</span></p>
+                            <p><strong>Seats:</strong> <span id="sum-seats">None Selected</span></p>
+                            <p><strong>Tickets:</strong> <span id="sum-tickets">0</span></p>
+                            <p><strong>Fare per Ticket:</strong> <span id="sum-fare">GHS 0.00</span></p>
+                        </div>
+
+                        <div class="border-t pt-4">
+                            <p class="text-lg font-bold text-red-600">Total Cost:</p>
+                            <p id="sum-total" class="text-3xl font-extrabold text-red-600">GHS 0.00</p>
+                        </div>
+
+                        <button id="payment-button" onclick="simulatePayment()" disabled
+                            class="w-full bg-emerald-500 text-white px-6 py-3 rounded-lg font-bold disabled:opacity-50">
+                            <i data-lucide="credit-card" class="w-5 h-5 mr-2 inline-block"></i> Proceed to Payment
+                        </button>
+                    </section>
+                </div>
+            </div>
+
+            <div id="history-page" class="page hidden">
+                <h2 class="text-3xl font-bold mb-6 text-red-600">Booking History</h2>
+                <div class="card p-6 rounded-xl">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Ticket No.</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Route</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Seats</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Total Paid</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body" class="divide-y divide-gray-200"></tbody>
+                        </table>
+                        <p id="history-placeholder" class="text-center text-gray-400 mt-4 text-sm">No recorded bookings
+                            yet.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="mt-8 bg-green-500 shadow xl">
+            <div class="max-w-7xl mx-auto px-4 py-4 text-center text-sm text-black-500">
+                <p>&copy;Abbys bus<br> STUDENT NAME: Abigail Owusua Nyarko<br> STUDENT ID: PUIS23210054</p>
+            </div>
+        </footer>
+
+        <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4"
+            onclick="closeModal(event)">
+            <div id="modal-content" class="card p-6 rounded-xl max-w-lg w-full transform transition-all"
+                onclick="event.stopPropagation()">
+                <h3 id="modal-title" class="text-xl font-bold mb-4 text-red-600"></h3>
+                <div id="modal-body" class="text-gray-700 space-y-3"></div>
+                <button onclick="closeModal()"
+                    class="mt-6 w-full bg-red-600 text-white px-4 py-3 rounded-lg font-bold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ROUTES = [
+            { name: 'Accra - Kumasi', departure: 'Accra Central', destination: 'Kumasi Kejetia', baseFare: 50.0 },
+            { name: 'Tema - Takoradi', departure: 'Tema Lorry Station', destination: 'Takoradi Market', baseFare: 100.0 },
+            { name: 'Tamale Express', departure: 'Tamale Main', destination: 'Accra Central', baseFare: 170.0 }
+        ];
+        const BUS_CLASSES = { Standard: 1.0, Executive: 1.25, VIP: 1.5 };
+        const SEAT_LAYOUT = [
+            ['B', 'A', 'G', 'A'],
+            ['A', 'A', 'G', 'A'],
+            ['A', 'A', 'G', 'B'],
+            ['A', 'A', 'G', 'A'],
+            ['A', 'A', 'G', 'A'],
+            ['B', 'A', 'G', 'A'],
+            ['A', 'A', 'G', 'A'],
+            ['A', 'A', 'G', 'A'],
+            ['A', 'A', 'G', 'A'],
+            ['A', 'A', 'A', 'A']
+        ];
+
+        let selectedSeats = [];
+        let bookingRecords = [];
+        let currentBusClass = 'Standard';
+
+        const pages = ['home', 'booking', 'history'];
+        const formEl = document.getElementById('booking-form');
+        const routeSelect = document.getElementById('route-select');
+        const departureSelect = document.getElementById('departure-select');
+        const destinationSelect = document.getElementById('destination-select');
+        const ticketsInput = document.getElementById('tickets-input');
+        const busOptionsContainer = document.getElementById('bus-options');
+        const seatMapContainer = document.getElementById('bus-layout');
+        const maxSeatsInfo = document.getElementById('max-seats-info');
+        const paymentButton = document.getElementById('payment-button');
+        const historyTableBody = document.getElementById('history-table-body');
+        const historyPlaceholder = document.getElementById('history-placeholder');
+        const seatSelectionError = document.getElementById('seat-selection-error');
+        const seatAvailabilityChart = document.getElementById('seat-availability-chart');
+
+        function showPage(pageId) {
+            pages.forEach(id => {
+                const el = document.getElementById(id + '-page');
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(pageId + '-page');
+            if (target) target.classList.remove('hidden');
+            if (pageId === 'history') renderHistory();
+        }
+
+        function initialize() {
+            loadHistory();
+            populateRouteDropdowns();
+            populateBusOptions();
+            renderSeatMap();
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('date-input');
+            if (dateInput) { dateInput.min = today; dateInput.value = today; }
+            updateSummary();
+            if (typeof lucide !== 'undefined' && lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+            loadTheme();
+        }
+
+        function populateRouteDropdowns() {
+            if (!routeSelect || !departureSelect || !destinationSelect) return;
+            routeSelect.innerHTML = '<option value="">Choose Route</option>';
+            const departures = new Set();
+            const destinations = new Set();
+            ROUTES.forEach(route => {
+                const opt = document.createElement('option');
+                opt.value = route.name; opt.textContent = route.name;
+                routeSelect.appendChild(opt);
+                departures.add(route.departure); destinations.add(route.destination);
+            });
+            departureSelect.innerHTML = '<option value="">Choose Departure</option>';
+            destinationSelect.innerHTML = '<option value="">Choose Destination</option>';
+            Array.from(departures).forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; departureSelect.appendChild(o); });
+            Array.from(destinations).forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; destinationSelect.appendChild(o); });
+
+            if (ROUTES.length > 0) {
+                routeSelect.value = ROUTES[0].name;
+                departureSelect.value = ROUTES[0].departure;
+                destinationSelect.value = ROUTES[0].destination;
+            }
+        }
+
+        function populateBusOptions() {
+            if (!busOptionsContainer) return;
+            busOptionsContainer.innerHTML = Object.keys(BUS_CLASSES).map(cls => `
+    <label class="flex items-center cursor-pointer">
+      <input type="radio" name="busClass" value="${cls}" ${cls === currentBusClass ? 'checked' : ''} onchange="updateClass('${cls}')" class="w-4 h-4"/>
+      <span class="ml-2 text-sm font-medium">${cls}</span>
+    </label>
+  `).join('');
+        }
+
+        function updateClass(className) { currentBusClass = className; updateSummary(); }
+
+        function renderSeatMap() {
+            if (!seatMapContainer) return;
+            seatMapContainer.innerHTML = '';
+            let seatNumber = 1;
+            SEAT_LAYOUT.forEach((row, rowIndex) => {
+                row.forEach((seatStatus, seatColIndex) => {
+                    const seatElement = document.createElement('div');
+                    const seatID = `${rowIndex}-${seatColIndex}`;
+                    if (seatStatus === 'G') { seatElement.className = 'seat-gangway'; }
+                    else {
+                        seatElement.textContent = seatNumber++;
+                        seatElement.classList.add('seat');
+                        if (seatStatus === 'B') seatElement.classList.add('seat-booked');
+                        else {
+                            if (selectedSeats.includes(seatID)) seatElement.classList.add('seat-selected');
+                            else seatElement.classList.add('seat-available');
+                            seatElement.addEventListener('click', () => toggleSeat(seatID, seatElement));
+                        }
+                    }
+                    seatMapContainer.appendChild(seatElement);
+                });
+            });
+            updateSeatAvailabilityChart();
+        }
+
+        function toggleSeat(seatID, element) {
+            const ticketCount = parseInt(ticketsInput.value) || 0;
+            if (selectedSeats.includes(seatID)) {
+                selectedSeats = selectedSeats.filter(id => id !== seatID);
+                element.classList.remove('seat-selected'); element.classList.add('seat-available');
+            } else if (selectedSeats.length < ticketCount) {
+                selectedSeats.push(seatID);
+                element.classList.remove('seat-available'); element.classList.add('seat-selected');
+            } else {
+                showModal('Selection Error', `You have selected ${ticketCount} ticket(s). Deselect a seat before selecting a new one.`);
+                return;
+            }
+            updateSummary();
+        }
+
+        function updateSeatAvailabilityChart() {
+            if (!seatAvailabilityChart) return;
+            const flat = SEAT_LAYOUT.flat();
+            const totalSeats = flat.filter(s => s !== 'G').length;
+            const bookedSeats = flat.filter(s => s === 'B').length;
+            const selectedCount = selectedSeats.length;
+            const availableSeats = totalSeats - bookedSeats - selectedCount;
+            seatAvailabilityChart.innerHTML = `
+    <div class="flex justify-center items-center gap-4">
+      <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-500 mr-1"></span>Available: ${availableSeats}</span>
+      <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-red-500 mr-1"></span>Selected: ${selectedCount}</span>
+      <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-gray-400 mr-1"></span>Booked: ${bookedSeats}</span>
+    </div>`;
+            if (maxSeatsInfo) maxSeatsInfo.textContent = ticketsInput ? ticketsInput.value : '1';
+        }
+
+        function getSelectedRoute() { return ROUTES.find(r => r.name === (routeSelect ? routeSelect.value : '')); }
+        function getCalculatedTotal() {
+            const route = getSelectedRoute();
+            const ticketCount = parseInt(ticketsInput.value) || 0;
+            const classMultiplier = BUS_CLASSES[currentBusClass] || 1.0;
+            if (!route) return 0.0;
+            return route.baseFare * classMultiplier * ticketCount;
+        }
+
+        function updateSummary() {
+            const route = getSelectedRoute();
+            const ticketCount = parseInt(ticketsInput.value) || 0;
+            const totalCost = getCalculatedTotal();
+            const baseFare = route ? route.baseFare.toFixed(2) : '0.00';
+            const finalFare = route ? (route.baseFare * BUS_CLASSES[currentBusClass]).toFixed(2) : '0.00';
+
+            if (seatSelectionError) {
+                if (selectedSeats.length !== ticketCount || ticketCount === 0) {
+                    seatSelectionError.classList.remove('hidden'); if (paymentButton) paymentButton.disabled = true;
+                } else {
+                    seatSelectionError.classList.add('hidden'); if (paymentButton) paymentButton.disabled = false;
+                }
+            }
+
+            const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+            setText('sum-route', route ? route.name : 'N/A');
+            setText('sum-date', document.getElementById('date-input') ? document.getElementById('date-input').value : 'N/A');
+            setText('sum-class', currentBusClass);
+            setText('sum-seats', selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None Selected');
+            setText('sum-tickets', ticketCount);
+            setText('sum-fare', `GHS ${finalFare} (Base: GHS ${baseFare})`);
+            setText('sum-total', `GHS ${totalCost.toFixed(2)}`);
+            updateSeatAvailabilityChart();
+        }
+
+        function updateFares() { updateSummary(); }
+
+        function validateForm() {
+            const passengerNameEl = document.getElementById('passenger-name');
+            const passengerName = passengerNameEl ? passengerNameEl.value.trim() : '';
+            const ticketCount = parseInt(ticketsInput.value) || 0;
+            if (!formEl || !formEl.checkValidity() || !passengerName || ticketCount < 1) {
+                showModal('Validation Error', 'Please fill in all travel details correctly.');
+                return false;
+            }
+            if (selectedSeats.length !== ticketCount) {
+                showModal('Validation Error', `You must select exactly ${ticketCount} seats for your booking.`);
+                return false;
+            }
+            return true;
+        }
+
+        function handleBookingConfirmation() {
+            if (validateForm()) {
+                const total = getCalculatedTotal().toFixed(2);
+                showModal('Booking Confirmation', `
+      <p>You are about to book ${selectedSeats.length} ticket(s) for <strong>${getSelectedRoute().name}</strong> on <strong>${document.getElementById('date-input').value}</strong>.</p>
+      <p class="font-bold text-lg mt-2">Total Amount Due: GHS ${total}</p>
+      <p class="text-sm mt-3 text-red-500">Click 'Proceed to Payment' to finalize the simulated booking.</p>
+    `);
+                if (paymentButton) paymentButton.disabled = false;
+            }
+        }
+
+        function simulatePayment() {
+            if (!validateForm()) return;
+            const record = {
+                id: Date.now(),
+                ticketNo: generateTicketNumber(),
+                passengerName: document.getElementById('passenger-name').value,
+                route: getSelectedRoute().name,
+                date: document.getElementById('date-input').value,
+                class: currentBusClass,
+                seats: selectedSeats.join(', '),
+                tickets: selectedSeats.length,
+                total: getCalculatedTotal().toFixed(2),
+                bookingTime: new Date().toLocaleString()
+            };
+            bookingRecords.unshift(record);
+            saveHistory();
+            displayReceipt(record);
+            resetForm();
+            if (paymentButton) paymentButton.disabled = true;
+            showPage('history');
+        }
+
+        function generateTicketNumber() { const prefix = 'SB'; const randomNum = Math.floor(100000 + Math.random() * 900000); return `${prefix}-${randomNum}`; }
+
+        function displayReceipt(record) {
+            const receiptContent = `
+    <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-300">
+      <p class="font-bold text-emerald-600 text-lg">Payment Successful!</p>
+    </div>
+    <p><strong>Ticket Number:</strong> <span class="text-red-600 font-bold">${record.ticketNo}</span></p>
+    <p><strong>Passenger:</strong> ${record.passengerName}</p>
+    <p><strong>Route:</strong> ${record.route}</p>
+    <p><strong>Travel Date:</strong> ${record.date}</p>
+    <p><strong>Seats Booked:</strong> ${record.seats}</p>
+    <p><strong>Total Paid:</strong> GHS ${record.total}</p>
+    <p><strong>Booking Time:</strong> ${record.bookingTime}</p>
+  `;
+            showModal('Digital Receipt', receiptContent);
+        }
+
+        function resetForm() {
+            if (formEl) formEl.reset();
+            selectedSeats = [];
+            renderSeatMap();
+            updateSummary();
+            if (paymentButton) paymentButton.disabled = true;
+            const passengerNameEl = document.getElementById('passenger-name');
+            if (passengerNameEl) passengerNameEl.value = '';
+            if (ticketsInput) ticketsInput.value = '1';
+            const dateInput = document.getElementById('date-input');
+            if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+            updateClass('Standard');
+            populateBusOptions();
+        }
+
+        function loadHistory() { const stored = localStorage.getItem('bookingRecords'); if (stored) bookingRecords = JSON.parse(stored); }
+        function saveHistory() { localStorage.setItem('bookingRecords', JSON.stringify(bookingRecords)); renderHistory(); }
+
+        function renderHistory() {
+            if (!historyTableBody || !historyPlaceholder) return;
+            if (bookingRecords.length === 0) { historyTableBody.innerHTML = ''; historyPlaceholder.classList.remove('hidden'); return; }
+            historyPlaceholder.classList.add('hidden');
+            historyTableBody.innerHTML = bookingRecords.map(record => `
+    <tr class="hover:bg-gray-50">
+      <td class="px-6 py-4 text-sm font-medium text-red-600">${record.ticketNo}</td>
+      <td class="px-6 py-4 text-sm">${record.route}</td>
+      <td class="px-6 py-4 text-sm">${record.seats}</td>
+      <td class="px-6 py-4 text-sm font-semibold">GHS ${record.total}</td>
+      <td class="px-6 py-4 text-sm text-gray-500">${record.date}</td>
+    </tr>
+  `).join('');
+        }
+
+        const modal = document.getElementById('custom-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalContent = document.getElementById('modal-content');
+
+        function showModal(title, bodyHTML) {
+            if (!modal || !modalTitle || !modalBody || !modalContent) return;
+            modalTitle.textContent = title; modalBody.innerHTML = bodyHTML;
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => modalContent.classList.add('scale-100'), 10);
+        }
+
+        function closeModal(event) {
+            if (!modal || !modalContent) return;
+            if (event && event.target !== modal) return;
+            modalContent.classList.remove('scale-100'); setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 180);
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+
+        function toggleTheme() { setTheme(htmlElement.classList.contains('light') ? 'dark' : 'light'); }
+
+        function setTheme(mode) {
+            htmlElement.classList.remove('light', 'dark'); htmlElement.classList.add(mode);
+            try { localStorage.setItem('theme', mode); } catch (e) { }
+            if (themeIcon) {
+                themeIcon.setAttribute('data-lucide', mode === 'dark' ? 'moon' : 'sun');
+                themeIcon.setAttribute('aria-label', mode === 'dark' ? 'Moon icon for dark mode' : 'Sun icon for light mode');
+            }
+            if (typeof lucide !== 'undefined' && lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme) setTheme(savedTheme);
+            else if (prefersDark) setTheme('dark');
+            else setTheme('light');
+        }
+
+        document.addEventListener('DOMContentLoaded', initialize);
+        window.showPage = showPage;
+        window.updateClass = updateClass;
+        window.updateFares = updateFares;
+        window.handleBookingConfirmation = handleBookingConfirmation;
+        window.simulatePayment = simulatePayment;
+        window.resetForm = resetForm;
+        window.closeModal = closeModal;
+    </script>
+</body>
+
+</html>

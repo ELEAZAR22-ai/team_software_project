@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop — StandingDesk Ltd</title>
+    <link rel="stylesheet" href="shop.css">
+    <script src="shop.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <h2>StandingDesk Ltd</h2>
+        <nav>
+            <a href="standing.html">HOME</a>
+            <a href="shop.html">SHOP</a>
+            <a href="health.html">HEALTH</a>
+            <a href="cont.html">CONTACT</a>
+            <a href="booking.html">BOOKING </a>
+            <a href="home.html">Miniapp</a>
+        </nav>
+        <button class="cart">Cart (<span id="cart-count">0</span>)</button>
+    </div>
+
+    <div class="head">
+        <h2>MULTIPLE DESK PRODUCTS — SHOP NOW</h2>
+    </div>
+
+    <div class="container">
+        <h1>PREMIUM STANDING DESK COLLECTION</h1>
+
+        <!-- Product 1: ERGONOTRON WORKFIT -->
+        <div class="product-card" data-price="2000.00">
+            <img src="image/erg.jpg" alt="Ergonotron Workfit">
+            <h1>Ergonotron Workfit — Height Adjustment</h1>
+            <p>Help to adjust height and position for optimal ergonomics and comfort during long work hours.</p>
+            <p><strong>Price: GHS 2,000.00</strong></p>
+            <button id="add-to-cart">Add To Cart</button>
+        </div>
+
+        <!-- Product 2: VARIDESK -->
+        <div class="product-card" data-price="900.00">
+            <img src="image/fit.jpg" alt="VariDesk">
+            <h1>VariDesk — Monitor Positioning</h1>
+            <p>Help to position the monitor as preferred with smooth adjustability and stability.</p>
+            <p><strong>Price: GHS 900.00</strong></p>
+            <button id="add-to-cart">Add To Cart</button>
+        </div>
+
+        <!-- Product 3: UPLIFT DESK -->
+        <div class="product-card" data-price="1200.00">
+            <img src="image/fi.jpg" alt="Uplift Desk">
+            <h1>Uplift Desk — Posture Control</h1>
+            <p>Control standing with good posture and maintain proper spinal alignment throughout the day.</p>
+            <p><strong>Price: GHS 1,200.00</strong></p>
+            <button id="add-to-cart">Add To Cart</button>
+        </div>
+
+        <!-- Product 4: AUTONOMOUS SMARTDESK -->
+        <div class="product-card" data-price="2000.00">
+            <img src="image/ara.jpeg" alt="Autonomous SmartDesk">
+            <h1>Autonomous SmartDesk — Keyboard Positioning</h1>
+            <p>Positioning your keyboard and mouse with precision for maximum comfort and efficiency.</p>
+            <p><strong>Price: GHS 2,000.00</strong></p>
+            <button id="add-to-cart">Add To Cart</button>
+        </div>
+
+        <!-- Product 5: FLEXISPOT -->
+        <div class="product-card" data-price="3500.00">
+            <img src="image/gear.webp" alt="Flexispot">
+            <h1>Flexispot — Premium Height Adjustment</h1>
+            <p>Help to adjust height and position with motorized precision and memory presets.</p>
+            <p><strong>Price: GHS 3,500.00</strong></p>
+            <button id="add-to-cart">Add To Cart</button>
+        </div>
+
+        <!-- Product 6: GEAREDDESK -->
+        <div class="product-card" data-price="5000.00">
+            <img src="image/shi.jpg" alt="GearedDesk">
+            <h1>GearedDesk — Sit-Stand Switch</h1>
+            <p>Can switch between sitting and standing seamlessly with smooth gear mechanisms.</p>
+            <p><strong>Price: GHS 5,000.00</strong></p>
+            <button id="add-to-cart">Add To Cart</button>
+        </div>
+
+        <!-- Product 7: LOCO -->
+        <div class="product-card" data-price="4000.00">
+            <img src="image/lo.jpg" alt="Loco Cable Management">
+            <h1>Loco — Cable Management System</h1>
+            <p>Keep cables and cords organized under your desk for a clean and professional workspace.</p>
+            <p><strong>Price: GHS 4,000.00</strong></p>
+            <button id="add-to-cart">Add To Cart</button>
+        </div>
+
+        <!-- Product 8: MOTIONDESK -->
+        <div class="product-card" data-price="1000.00">
+            <img src="image/mo.webp" alt="MotionDesk">
+            <h1>MotionDesk — 360° Rotation</h1>
+            <p>Rotating to any direction the user pushes it with smooth ball-bearing mechanics.</p>
+            <p><strong>Price: GHS 1,000.00</strong></p>
+            <button id="add-to-cart">Add To Cart</button>
+        </div>
+
+    </div>
+
+    <!-- Summary sidebar (optional static display) -->
+    <div
+        style="max-width:1200px;margin:28px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.06)">
+        <h3>Order Summary</h3>
+        <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap">
+            <div>
+                <div class="small">Items in cart</div>
+                <div style="font-size:1.5rem;font-weight:700;color:#e74c3c"><span id="cart-count">0</span></div>
+            </div>
+            <div>
+                <div class="small">Total amount</div>
+                <div style="font-size:1.5rem;font-weight:700;color:#2c3e50"><span id="total-price">GHS 0.00</span></div>
+            </div>
+        </div>
+        <p class="small" style="margin-top:12px;color:#7f8c8d">Click "Add To Cart" on any product above. View your cart
+            in the floating panel (bottom-right).</p>
+    </div>
+
+    <script src="shop.js"></script>
+</body>
+
+</html>
+// ...existing code...

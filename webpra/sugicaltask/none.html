@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Countdown on Homepage</title>
+    <style>
+        :root {
+            --primary: #2b6cb0;
+            --bg: #f4f7fb;
+            --text: #1f2a37;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        div {
+            text-align: center;
+            margin: 1rem 0;
+            background-color: aqua;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Simple hero styling */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        /* Basic layout */
+        section {
+            padding: 60px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Your core value proposition here</h1>
+            <p>A short description that explains the benefit to visitors.</p>
+            <div id="countdown" aria-live="polite" style="font-weight:600; font-size:1.25rem; margin: 1rem 0;">
+                Loading countdown...
+            </div>
+            <a href="#kontakt" class="btn-primary">Schedule a meeting</a>
+        </div>
+    </section>
+
+    <section id="kontakt" class="section">
+        <div class="container">
+            <h2>Contact</h2>
+            <form action="#" method="post" novalidate>
+                <label>Name<br><input type="text" name="name"></label><br><br>
+                <label>Email<br><input type="email" name="email"></label><br><br>
+                <label>Message<br><textarea name="message" rows="4"></textarea></label><br><br>
+                <button type="submit">Send</button>
+            </form>
+            <div id="countdown-small" aria-live="polite" style="margin-top:1rem; font-weight:600;">
+                Countdown will appear here
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const targetDate = new Date("2025-12-31T23:59:59").getTime();
+        const countdownEl = document.getElementById("countdown");
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            if (diff <= 0) {
+                countdownEl.textContent = "Launch started or event occurred!";
+                clearInterval(timer);
+                return;
+            }
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            countdownEl.textContent = `Launch in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+        updateCountdown();
+        const timer = setInterval(updateCountdown, 1000);
+
+        // Small countdown in footer/contact (optional, same date)
+        const targetDateSmall = targetDate;
+        const countdownSmallEl = document.getElementById("countdown-small");
+        function updateCountdownSmall() {
+            const now = new Date().getTime();
+            const diff = targetDateSmall - now;
+            if (diff <= 0) {
+                countdownSmallEl.textContent = "Offer ended or event started.";
+                clearInterval(timerSmall);
+                return;
+            }
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            countdownSmallEl.textContent = `Available for ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+        updateCountdownSmall();
+        const timerSmall = setInterval(updateCountdownSmall, 1000);
+    </script>
+</body>
+
+</html>

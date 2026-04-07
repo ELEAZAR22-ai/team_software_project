@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ticket Booking System</title>
+    <style>
+        :root {
+            --primary: #e11d48;
+            --muted: #6b7280;
+            --card: #1df1f1;
+            --bg: #072627;
+            --seat-available: #07fd6d;
+            --seat-selected: #2271e7;
+            --seat-booked: #f73838;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            background: var(--bg);
+            color: black;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 28px auto;
+            padding: 18px
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            color: var(--primary)
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .05)
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 18px;
+            margin-top: 16px
+        }
+
+        label {
+            display: block;
+            font-size: .875rem;
+            margin-bottom: 6px;
+            color: var(--muted)
+        }
+
+        input[type=text],
+        input[type=date],
+        select,
+        input[type=number],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 0;
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer
+        }
+
+        .btn.ghost {
+            background: #f3f4f6;
+            color: #111
+        }
+
+        .seat-map {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px
+        }
+
+        .seat {
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .9rem;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none
+        }
+
+        .seat.available {
+            background: var(--seat-available);
+            color: #fff
+        }
+
+        .seat.selected {
+            background: var(--seat-selected);
+            color: #fff;
+            transform: scale(1.04)
+        }
+
+        .seat.booked {
+            background: var(--seat-booked);
+            color: #fff;
+            cursor: not-allowed;
+            opacity: .9
+        }
+
+        .legend {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 8px;
+            font-size: .9rem
+        }
+
+        .legend .key {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eef2f7;
+            text-align: left
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 6, 23, .5);
+            z-index: 60
+        }
+
+        .modal.open {
+            display: flex
+        }
+
+        .modal .box {
+            width: 90%;
+            max-width: 520px;
+            background: var(--card);
+            padding: 18px;
+            border-radius: 10px
+        }
+
+        .small {
+            font-size: .85rem;
+            color: var(--muted)
+        }
+
+        @media(max-width:880px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Ticket Booking System</h1>
+            <div class="small"></div>
+        </header>
+
+        <div class="card">
+            <form id="booking-form" onsubmit="event.preventDefault(); onConfirmBooking()">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div>
+                        <label for="passenger">Passenger name</label>
+                        <input id="passenger" type="text" placeholder="e.g. Kofi Mensah" required />
+                    </div>
+                    <div>
+                        <label for="route">Route</label>
+                        <select id="route" required></select>
+                    </div>
+                    <div>
+                        <label for="date">Travel date</label>
+                        <input id="date" type="date" required />
+                    </div>
+                    <div>
+                        <label for="tickets">Tickets</label>
+                        <input id="tickets" type="number" min="1" value="1" required />
+                    </div>
+                </div>
+
+                <div style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                    <div>
+                        <label class="small">Bus class</label>
+                        <div id="class-options" style="display:flex;gap:8px;margin-top:6px"></div>
+                    </div>
+                    <div style="margin-left:auto">
+                        <button type="button" class="btn ghost" onclick="resetForm()">Reset</button>
+                        <button type="submit" class="btn" style="margin-left:8px">Confirm</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px" class="card">
+                    <div style="display:flex;gap:18px;align-items:flex-start">
+                        <div style="flex:1">
+                            <label class="small">Select seats (pick exactly the number of tickets)</label>
+                            <div id="seat-map" class="seat-map" role="grid" aria-label="Seat map"></div>
+                            <div class="legend">
+                                <div class="key"><span
+                                        style="width:14px;height:14px;border-radius:3px;background:var(--seat-available);display:inline-block"></span>
+                                    Available</div>
+                                <div class="key"><span
+                                        style="width:14px;height:14px;border-radius:3px;background:var(--seat-selected);display:inline-block"></span>
+                                    Selected</div>
+                                <div class="key"><span
+                                        style="width:14px;height:14px;border-radius:3px;background:var(--seat-booked);display:inline-block"></span>
+                                    Booked</div>
+                            </div>
+                        </div>
+
+                        <aside style="width:320px">
+                            <div class="summary">
+                                <div><strong>Summary</strong></div>
+                                <div class="small">Route: <span id="sum-route">N/A</span></div>
+                                <div class="small">Date: <span id="sum-date">N/A</span></div>
+                                <div class="small">Class: <span id="sum-class">Standard</span></div>
+                                <div class="small">Tickets: <span id="sum-tickets">1</span></div>
+                                <div class="small">Seats: <span id="sum-seats">—</span></div>
+                                <div class="small">Fare / ticket: <span id="sum-fare">GHS 0.00</span></div>
+                                <div style="border-top:1px solid #eef2f7;padding-top:8px">
+                                    <div class="small">Total</div>
+                                    <div style="font-weight:700;font-size:1.3rem;color:var(--primary)" id="sum-total">
+                                        GHS 0.00</div>
+                                    <button id="pay-btn" type="button" class="btn" style="width:100%;margin-top:10px"
+                                        onclick="onPay()" disabled>Simulate Payment</button>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div style="margin-top:18px" class="card">
+            <h3 style="margin-top:0">Booking history</h3>
+            <div style="overflow:auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket No</th>
+                            <th>Passenger</th>
+                            <th>Route</th>
+                            <th>Seats</th>
+                            <th>Total (GHS)</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body"></tbody>
+                </table>
+                <p id="history-empty" class="small" style="text-align:center;margin:12px 0">No bookings yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div id="modal" class="modal" onclick="closeModal(event)">
+        <div class="box" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
+            <div id="modal-content"></div>
+            <div style="margin-top:12px;text-align:right">
+                <button class="btn ghost" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data & state
+        const ROUTES = [
+            { name: 'Accra - Kumasi', fare: 30.0 },
+            { name: 'Tema - Takoradi', fare: 50.0 },
+            { name: 'Tamale Express', fare: 100.0 }
+        ];
+        const CLASSES = { Standard: 1.0, Executive: 1.25, VIP: 1.5 };
+        const ROWS = 8, COLS = 4; // grid
+        const seatLayout = Array.from({ length: ROWS }).map(() => Array.from({ length: COLS }, () => 'A')); // 'A' available, 'B' booked
+        // Example: mark some booked seats
+        seatLayout[0][0] = 'B'; seatLayout[2][3] = 'B';
+
+        let selectedSeats = [];
+        let currentClass = 'Standard';
+        const bookingKey = 'demo_bookings_v1';
+        let bookings = JSON.parse(localStorage.getItem(bookingKey) || '[]');
+
+        // UI refs
+        const routeEl = document.getElementById('route');
+        const dateEl = document.getElementById('date');
+        const ticketsEl = document.getElementById('tickets');
+        const seatMapEl = document.getElementById('seat-map');
+        const classOptionsEl = document.getElementById('class-options');
+        const sumRoute = document.getElementById('sum-route');
+        const sumDate = document.getElementById('sum-date');
+        const sumClass = document.getElementById('sum-class');
+        const sumTickets = document.getElementById('sum-tickets');
+        const sumSeats = document.getElementById('sum-seats');
+        const sumFare = document.getElementById('sum-fare');
+        const sumTotal = document.getElementById('sum-total');
+        const payBtn = document.getElementById('pay-btn');
+        const historyBody = document.getElementById('history-body');
+        const historyEmpty = document.getElementById('history-empty');
+        const passengerEl = document.getElementById('passenger');
+
+        // init
+        function init() {
+            populateRoutes();
+            populateClasses();
+            renderSeatMap();
+            dateEl.value = new Date().toISOString().split('T')[0];
+            ticketsEl.addEventListener('input', onTicketsChange);
+            routeEl.addEventListener('change', updateSummary);
+            dateEl.addEventListener('change', updateSummary);
+            ticketsEl.addEventListener('change', updateSummary);
+            renderHistory();
+            updateSummary();
+        }
+
+        function populateRoutes() {
+            routeEl.innerHTML = '<option value="">Select route</option>' + ROUTES.map(r => `<option value="${r.name}">${r.name}</option>`).join('');
+            routeEl.selectedIndex = 1;
+        }
+        function populateClasses() {
+            classOptionsEl.innerHTML = Object.keys(CLASSES).map(cls => {
+                return `<label style="display:inline-flex;gap:8px;align-items:center">
+          <input type="radio" name="cls" value="${cls}" ${cls === currentClass ? 'checked' : ''} onchange="onClassChange('${cls}')">
+          <span>${cls}</span>
+        </label>`;
+            }).join('');
+        }
+
+        function renderSeatMap() {
+            seatMapEl.innerHTML = '';
+            let counter = 1;
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const id = `${r}_${c}`;
+                    const cell = document.createElement('div');
+                    const status = seatLayout[r][c];
+                    cell.className = 'seat';
+                    cell.dataset.id = id;
+                    cell.dataset.row = r; cell.dataset.col = c;
+                    if (status === 'B') { cell.classList.add('booked'); cell.textContent = 'X'; }
+                    else {
+                        cell.classList.add('available');
+                        cell.textContent = counter++;
+                        cell.tabIndex = 0;
+                        cell.addEventListener('click', () => onSeatClick(id, cell));
+                        cell.addEventListener('keydown', e => { if (e.key === 'Enter') onSeatClick(id, cell); });
+                    }
+                    seatMapEl.appendChild(cell);
+                }
+            }
+        }
+
+        function onSeatClick(id, el) {
+            const ticketCount = Number(ticketsEl.value) || 1;
+            const [r, c] = id.split('_').map(Number);
+            if (seatLayout[r][c] === 'B') return;
+            if (selectedSeats.includes(id)) {
+                selectedSeats = selectedSeats.filter(s => s !== id);
+                el.classList.remove('selected');
+                el.classList.add('available');
+            } else {
+                if (selectedSeats.length >= ticketCount) {
+                    return alert(`You may only select ${ticketCount} seat(s). Deselect one first.`);
+                }
+                selectedSeats.push(id);
+                el.classList.remove('available'); el.classList.add('selected');
+            }
+            updateSummary();
+        }
+
+        function onClassChange(cls) {
+            currentClass = cls; updateSummary();
+        }
+
+        function onTicketsChange() {
+            // if more seats selected than tickets, deselect last extras
+            const ticketCount = Number(ticketsEl.value) || 1;
+            while (selectedSeats.length > ticketCount) {
+                const last = selectedSeats.pop();
+                const el = seatMapEl.querySelector(`[data-id="${last}"]`);
+                if (el) { el.classList.remove('selected'); el.classList.add('available'); }
+            }
+            updateSummary();
+        }
+
+        function getSelectedRouteObj() { return ROUTES.find(r => r.name === routeEl.value) || null; }
+        function getFarePerTicket() {
+            const route = getSelectedRouteObj(); if (!route) return 0;
+            return route.fare * (CLASSES[currentClass] || 1);
+        }
+        function updateSummary() {
+            const route = routeEl.value || 'N/A';
+            sumRoute.textContent = route;
+            sumDate.textContent = dateEl.value || 'N/A';
+            sumClass.textContent = currentClass;
+            const tickets = Number(ticketsEl.value) || 1;
+            sumTickets.textContent = tickets;
+            sumSeats.textContent = selectedSeats.length ? selectedSeats.map(s => seatLabelFromId(s)).join(', ') : '—';
+            const fare = getFarePerTicket();
+            sumFare.textContent = `GHS ${fare.toFixed(2)}`;
+            sumTotal.textContent = `GHS ${(fare * selectedSeats.length).toFixed(2)}`;
+            payBtn.disabled = !(selectedSeats.length === tickets && routeEl.value);
+        }
+
+        function seatLabelFromId(id) {
+            const [r, c] = id.split('_').map(Number);
+            return String.fromCharCode(65 + r) + (c + 1);
+        }
+
+        function onConfirmBooking() {
+            // validate
+            const passenger = passengerEl.value.trim();
+            if (!passenger) return alert('Enter passenger name.');
+            if (!routeEl.value) return alert('Select a route.');
+            const tickets = Number(ticketsEl.value) || 1;
+            if (selectedSeats.length !== tickets) return alert(`Select exactly ${tickets} seat(s).`);
+            // show modal confirmation
+            const fare = getFarePerTicket(); const total = (fare * selectedSeats.length).toFixed(2);
+            const html = `<p><strong>Passenger:</strong> ${passenger}</p>
+        <p><strong>Route:</strong> ${routeEl.value}</p>
+        <p><strong>Seats:</strong> ${selectedSeats.map(seatLabelFromId).join(', ')}</p>
+        <p><strong>Total:</strong> GHS ${total}</p>
+        <div style="margin-top:10px"><button class="btn" onclick="confirmPayment()">Proceed to Payment</button>
+        <button class="btn ghost" style="margin-left:8px" onclick="closeModal()">Cancel</button></div>`;
+            showModal('Confirm booking', html);
+        }
+
+        function showModal(title, bodyHtml) {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `<h3 style="margin:0 0 8px 0">${title}</h3>` + bodyHtml;
+            modal.classList.add('open');
+        }
+        function closeModal(evt) {
+            if (evt && evt.target && evt.target.id !== 'modal') return; // click inside box ignored
+            document.getElementById('modal').classList.remove('open');
+        }
+
+        function confirmPayment() {
+            // simulate payment success and store booking
+            const id = Date.now();
+            const record = {
+                id,
+                ticketNo: 'T-' + Math.floor(100000 + Math.random() * 900000),
+                passenger: passengerEl.value.trim(),
+                route: routeEl.value,
+                seats: selectedSeats.map(seatLabelFromId),
+                total: (getFarePerTicket() * selectedSeats.length).toFixed(2),
+                date: dateEl.value,
+                time: new Date().toLocaleString()
+            };
+            // mark seats as booked
+            selectedSeats.forEach(id => {
+                const [r, c] = id.split('_').map(Number);
+                seatLayout[r][c] = 'B';
+            });
+            bookings.unshift(record);
+            localStorage.setItem(bookingKey, JSON.stringify(bookings));
+            closeModal();
+            renderSeatMap(); // re-render to show booked seats
+            selectedSeats = [];
+            updateSummary();
+            renderHistory();
+            // show receipt
+            showModal('Booking successful', `<p>Ticket #: <strong>${record.ticketNo}</strong></p>
+        <p>Passenger: ${record.passenger}</p><p>Route: ${record.route}</p>
+        <p>Seats: ${record.seats.join(', ')}</p>
+        <p>Total Paid: GHS ${record.total}</p><p class="small">Time: ${record.time}</p>`);
+        }
+
+        function onPay() {
+            // direct simulate payment from summary (if enabled)
+            onConfirmBooking();
+        }
+
+        function resetForm() {
+            document.getElementById('booking-form').reset();
+            selectedSeats = [];
+            // optionally reset seatLayout bookings kept
+            renderSeatMap();
+            currentClass = 'Standard';
+            populateClasses();
+            updateSummary();
+        }
+
+        function renderHistory() {
+            historyBody.innerHTML = bookings.map(b => `
+        <tr>
+          <td>${b.ticketNo}</td>
+          <td>${b.passenger}</td>
+          <td>${b.route}</td>
+          <td>${b.seats.join(', ')}</td>
+          <td>GHS ${b.total}</td>
+          <td>${b.date}</td>
+        </tr>
+      `).join('');
+            historyEmpty.style.display = bookings.length ? 'none' : 'block';
+        }
+
+        // initialize app
+        init();
+    </script>
+</body>
+
+</html>

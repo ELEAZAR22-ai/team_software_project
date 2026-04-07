@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+    <title>taaa</title>
+    <style>
+        .head {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: none;
+        }
+
+        h1 {
+            align-items: center;
+            text-align: center;
+
+        }
+
+
+        nav {
+            height: 50px;
+            width: 1000px;
+            align-items: center;
+            align-content: center;
+            margin-top: none;
+            position: relative;
+            display: flex;
+
+        }
+
+        nav a {
+            align-items: center;
+            margin-left: 5px;
+            position: relative;
+            display: inline-block;
+            font-size: 1em;
+            font-weight: 500;
+            color: darkmagenta;
+            padding: 20px;
+            z-index: 1;
+
+        }
+
+        nav span {
+
+            transition: 2s;
+            border-radius: 20px;
+            width: 90px;
+            height: 40px;
+            background: linear-gradient(-50deg, #4f1918, #ff3332);
+            position: fixed;
+        }
+
+
+        nav a:nth-child(1):hover~span {
+            left: none;
+
+        }
+
+        nav a:nth-child(2):hover~span {
+            left: 95px;
+            width: 100px;
+        }
+
+        nav a:nth-child(3):hover~span {
+            left: 210px;
+            width: 100px;
+        }
+
+        nav a:nth-child(4):hover~span {
+            left: 335px;
+            width: 100px;
+        }
+
+        nav a:nth-child(5):hover~span {
+            left: 465;
+            width: 100px;
+        }
+
+        nav a:nth-child(6):hover~span {
+            left: 598;
+            width: 100px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        .data-table thead {
+            background: #f3f4f6;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #1488a5;
+            text-align: left;
+        }
+
+        .data-table tbody tr:hover {
+            background: #1c5d9e;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="head">
+        <h1><b>INNOVATION AND TECHNOLGY HUD</b></h1>
+        <nav>
+            <a href="home.html">HOME</a>
+            <a href="about.html">ABOUT</a>
+            <a href="gallery.html">GALLERY</a>
+            <a href="contact.html">CONTACTS</a>
+            <a href="schedule.html">SCHEDULES</a>
+            <a href="speakers.html">SPEAKERS</a>
+            <span></span>
+        </nav>
+    </div>
+    <table class="data-table" aria-label="Products table">
+        <thead>
+            <tr>
+                <th>TIME</th>
+                <th>ACTIVITY</th>
+                <th>PERSONNEL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>At 9:30am</td>
+                <td>Program begins with opening prayer</td>
+                <td>Rev. Dr. Patrick Adoonu</td>
+            </tr>
+            <tr>
+                <td>At 10:00am</td>
+                <td>Program activities and procedures are being layed out accordingly</td>
+                <td>Mr. Harry Atieku</td>
+            </tr>
+            <tr>
+                <td>At 1:00pm</td>
+                <td>Industriual connect with old students and alumni</td>
+                <td>Mr. Philip O. M. Adjei</td>
+            </tr>
+            <tr>
+                <td>At 2:00pm</td>
+                <td>Quick Q $ A between the community members...</td>
+                <td>Dr.Agbeko Micheal</td>
+            </tr>
+        </tbody>
+    </table>
+</body>

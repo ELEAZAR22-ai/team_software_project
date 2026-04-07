@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device, initial-scale=1">
+
+<head>
+    <title>Speakers</title>
+    <style>
+        .head {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: none;
+
+
+        }
+
+        h1 {
+            align-items: center;
+            text-align: center;
+
+        }
+
+
+        nav {
+            height: 50px;
+            width: 1000px;
+            align-items: center;
+            align-content: center;
+            margin-top: none;
+            position: relative;
+            display: flex;
+
+        }
+
+        nav a {
+            align-items: center;
+            margin-left: 5px;
+            position: relative;
+            display: inline-block;
+            font-size: 1em;
+            font-weight: 500;
+            color: darkmagenta;
+            padding: 20px;
+            z-index: 1;
+
+        }
+
+        nav span {
+
+            transition: 2s;
+            border-radius: 20px;
+            width: 90px;
+            height: 40px;
+            background: linear-gradient(-50deg, #4f1918, #ff3332);
+            position: fixed;
+        }
+
+
+        nav a:nth-child(1):hover~span {
+            left: none;
+
+        }
+
+        nav a:nth-child(2):hover~span {
+            left: 95px;
+            width: 100px;
+        }
+
+        nav a:nth-child(3):hover~span {
+            left: 210px;
+            width: 100px;
+        }
+
+        nav a:nth-child(4):hover~span {
+            left: 335px;
+            width: 100px;
+        }
+
+        nav a:nth-child(5):hover~span {
+            left: 465;
+            width: 100px;
+        }
+
+        nav a:nth-child(6):hover~span {
+            left: 598;
+            width: 100px;
+        }
+
+        h2 {
+            text-align: center;
+            color: blueviolet;
+        }
+
+        .card-container {
+            justify-content: center;
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+
+            text-align: center;
+            background-color: rgba(204, 35, 23, 0.133);
+            box-shadow: 0 2px 5px;
+            width: 270px;
+            padding: 10px;
+            transition: transform 0.3s ease;
+
+        }
+
+        .card:hover {
+
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .card h2 {
+            color: rgb(34, 109, 221);
+
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="head">
+        <h1><b>INNOVATION AND TECHNOLGY HUD</b></h1>
+        <nav>
+            <a href="home.html">HOME</a>
+            <a href="about.html">ABOUT</a>
+            <a href="gallery.html">GALLERY</a>
+            <a href="contact.html">CONTACTS</a>
+            <a href="schedule.html">SCHEDULES</a>
+            <a href="speakers.html">SPEAKERS</a>
+            <span></span>
+        </nav>
+    </div>
+    <h2>FEATURED SPEAKERS</h2>
+    <div class="card-container">
+        <div class="card">
+            <img src="po.jpg">
+            <h2>Mr. Philip O. M. Adjei</h2>
+            <p>Expert in Artificial Intelligence and Machine Learning with over 15 years of experience in the tech
+                industry.</p>
+        </div>
+        <div class="card">
+            <img src="ha.jpg">
+            <h2>Mr. Harry Atiekue</h2>
+            <p>Renowned Web Developer and Open Source Contributor, known for his work on several high-profile projects.
+            </p>
+        </div>
+        <div class="card">
+            <img src="ag.jpg">
+            <h2>Dr. Agbeko Micheal</h2>
+            <p>Data Scientist specializing in big data analytics and its applications in business intelligence.</p>
+        </div>
+    </div>
+</body>
+
+</html>

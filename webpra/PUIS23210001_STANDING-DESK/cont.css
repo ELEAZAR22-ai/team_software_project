@@ -1,0 +1,197 @@
+/* Contact page styles for cont.html */
+:root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --primary: #0f6feb;
+    --accent: #ef4444;
+    --muted: #128e9e;
+    --radius: 10px;
+    /* Ensure proper syntax */
+    --shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+    --gap: 12px;
+}
+
+* {
+    box-sizing: border-box
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #29aad1;
+    color: white;
+    padding: 15px 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header h2 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+nav a {
+    text-decoration: none;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, system-ui, Arial, sans-serif;
+    background: var(--bg);
+    color: #0b1220
+}
+
+.container {
+    max-width: 720px;
+    margin: 36px auto;
+    padding: 20px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+/* Form fields */
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #07a4c0;
+    background: #ecf6fc;
+    font-size: 0.96rem;
+    transition: box-shadow .12s ease, transform .08s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    box-shadow: 0 8px 20px rgba(15, 99, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+/* Radio group */
+label input[type="radio"] {
+    margin-right: 8px;
+    gap: 5px;
+    transform: translateY(2px);
+}
+
+/* Buttons */
+/* Support the custom <button-input> used in HTML (styled as a button) */
+button,
+button-input,
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 0;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+
+button:hover,
+button-input:hover,
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(15, 99, 255, 0.12);
+}
+
+button:active,
+button-input:active {
+    transform: translateY(-1px);
+}
+
+button.ghost {
+    background: #fff;
+    color: #0b1220;
+    border: 1px solid #e6edf6;
+}
+
+/* Footer / info block */
+.info {
+    max-width: 720px;
+    margin: 18px auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.thim-social a {
+    display: inline-block;
+    padding: 10px 14px;
+    margin: 6px 4px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    transition: transform .12s ease;
+}
+
+.thim-social .facebook {
+    background: #1877f2
+}
+
+.thim-social .twitter {
+    background: #1da1f2
+}
+
+.thim-social .linkedin {
+    background: #0a66c2
+}
+
+.thim-social .youtube {
+    background: #ff0000
+}
+
+.thim-social a:hover {
+    transform: translateY(-3px);
+    opacity: 0.95;
+}
+
+/* Small screens */
+@media(max-width:720px) {
+    .container {
+        margin: 16px;
+        padding: 14px
+    }
+
+    .thim-social a {
+        display: block;
+        margin: 6px 0
+    }
+}
+
+/* Utilities */
+.hidden {
+    display: none
+}
+
+.small {
+    font-size: .85rem;
+    color: var(--muted)
+}

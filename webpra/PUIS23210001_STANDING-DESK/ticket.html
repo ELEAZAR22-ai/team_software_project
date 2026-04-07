@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta charset=" UTF-8">
+<meta name="viewport" content="width=device, initail-sacle=1.0 ">
+
+<head>
+    <title>ticket</title>
+    <style>
+        body {
+            background-image: url(./images/bi.jpg);
+            width: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            justify-content: center;
+            align-items: center;
+            height: 50dvh;
+        }
+
+        .header {
+            display: flex;
+            background: rgba(127, 214, 13, 0.933);
+            width: 100%;
+            height: 100px;
+            gap: 20px;
+            align-items: center;
+            padding-left: 20px;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: rgb(26, 37, 202);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header a:hover {
+            color: rgb(255, 255, 255);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 150px;
+            color: rgb(207, 240, 18);
+        }
+
+        .collections {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 50px;
+            margin-top: 120px;
+        }
+
+        .collections div:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        .service {
+            background-image: url(./images/wi.webp);
+
+        }
+
+
+        .reserve {
+            background-image: url(./images/si.jpg);
+        }
+
+        .ticket {
+            background-image: url(./images/ti.webp);
+        }
+
+        .select {
+            background-image: url(./images/co.webp);
+        }
+
+        .safty {
+            background-image: url(./images/cc.webp);
+        }
+
+        .service,
+        .reserve,
+        .ticket,
+        .select,
+        .safty {
+            width: 150px;
+            height: 150px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .service p,
+        .reserve p,
+        .select p,
+        .ticket p,
+        .safty p {
+            color: rgb(252, 12, 12);
+            text-shadow: 2px 2px 4px #000000;
+            margin-top: 120px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <a href="ticket.html">HOME</a>
+        <a href="booking.html">BOOK TICKET</a>
+        <a href="about.html">ABOUT US</a>
+    </div>
+
+
+    <h1><b>TRAVEL, ENJOY WE TAKE YOU EVERYWHERE<br> AROUND THE GLOBE... </b></h1>
+
+
+    <div class="collections">
+        <div class="service">
+            <P>internet access</P>
+        </div>
+        <div class="reserve">
+            <p>reserve seat</p>
+        </div>
+        <div class="ticket">
+            <p>get a ticket</p>
+        </div>
+        <div class="select">
+            <p>luxury, express AC more</p>
+        </div>
+        <div class="safty">
+            <p>CCTV recording</p>
+        </div>
+    </div>
+</body>
+
+</html>

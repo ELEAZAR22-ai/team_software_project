@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Abouthud</title>
+    <link rel="stylesheet" href="">
+    <style>
+        .head {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: none;
+
+
+        }
+
+        h1 {
+            align-items: center;
+            text-align: center;
+
+        }
+
+
+        nav {
+            height: 50px;
+            width: 1000px;
+            align-items: center;
+            align-content: center;
+            margin-top: none;
+            position: relative;
+            display: flex;
+
+        }
+
+        nav a {
+            align-items: center;
+            margin-left: 5px;
+            position: relative;
+            display: inline-block;
+            font-size: 1em;
+            font-weight: 500;
+            color: darkmagenta;
+            padding: 20px;
+            z-index: 1;
+
+        }
+
+        nav span {
+
+            transition: 2s;
+            border-radius: 20px;
+            width: 90px;
+            height: 40px;
+            background: linear-gradient(-50deg, #4f1918, #ff3332);
+            position: fixed;
+        }
+
+
+        nav a:nth-child(1):hover~span {
+            left: none;
+
+        }
+
+        nav a:nth-child(2):hover~span {
+            left: 95px;
+            width: 100px;
+        }
+
+        nav a:nth-child(3):hover~span {
+            left: 210px;
+            width: 100px;
+        }
+
+        nav a:nth-child(4):hover~span {
+            left: 335px;
+            width: 100px;
+        }
+
+        nav a:nth-child(5):hover~span {
+            left: 465;
+            width: 100px;
+        }
+
+        nav a:nth-child(6):hover~span {
+            left: 598;
+            width: 100px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+
+        .card-container {
+            justify-content: center;
+            position: relative;
+            display: flex;
+            gap: 25px;
+        }
+
+        .card {
+            position: relative;
+            text-align: center;
+            background-color: rgba(204, 35, 23, 0.133);
+            box-shadow: 0 2px 5px;
+            width: 270px;
+            padding: 10px;
+            transition: transfoem 0.3s ease;
+
+        }
+
+        .card:hover {
+
+            transform: traslateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .card h2 {
+            color: rgb(34, 109, 221);
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="head">
+        <h1><b>INNOVATION AND TECHNOLGY HUD</b></h1>
+        <nav>
+            <a href="home.html">HOME</a>
+            <a href="about.html">ABOUT</a>
+            <a href="gallery.html">GALLERY</a>
+            <a href="contact.html">CONTACTS</a>
+            <a href="schedule.html">SCHEDULES</a>
+            <a href="speakers.html">SPEAKERS</a>
+            <span></span>
+        </nav>
+    </div>
+    <h1><b>InoTechHub </b><sup>O</sup>f <sup>P</sup>entecost <sup>U</sup>niversity.....</h1>
+    <div class="card-container">
+        <div class="card">
+            <img src="in.png" alt="Illustration of the reason for the occasion">
+            <h2>REASON FOR THE OCCASION....</h2>
+            <P> Reasoning; An annual program that brings all sections of the university community together, this program
+                is held
+                annually. Artificial Intelligence that is shifting the worlds economic and developmental projects.
+                Discussions,
+                knowledge, ideas, insight and many more are being obtained from proffessionals, alumni etc. </P>
+        </div>
+        <div class="card">
+            <img src="te.webp" alt="Image representing technological focus and curiosity">
+            <h2>THE FOCUS REMAIN CURIOUS???????</h2>
+            <p> Modern focus, aim, and achievements all rely on technological systems, to expand, broaden, wilden the
+                technical know how of technology. Pentecost University has make this program exceptional to train, teach
+                its students on systems how they help communities, societies, to improve in their productions, economic
+                developments, organization exchanges and more. </p>
+        </div>
+        <div class="card">
+            <img src="r.webp" alt="Graphic illustrating the purpose of the occasion">
+            <h2>OCCASION PURPPOSE...</h2>
+            <P>The need to equip our students with the necessary skills and knowledge to thrive in a rapidly changing
+                technological landscape. To foster innovation and creativity among students, encouraging them to think
+                critically and develop solutions to real-world problems. To provide a platform for networking and
+                collaboration among students, faculty, industry professionals, and alumni.</P>
+        </div>
+    </div>
+
+</body>
+
+
+</html>

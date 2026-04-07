@@ -1,0 +1,6 @@
+2025-12-09 00:00:28.213 [pool-3-thread-1] INFO  com.rs.mv.mvvs.client.catalog.from.scan.CurrentPathScanner - [client:400205]scan file in current open file directory(C:/xampp/htdocs/webpra/SemisterTest)
+2025-12-09 00:00:46.775 [pool-3-thread-1] INFO  com.rs.mv.mvvs.client.catalog.from.scan.CurrentPathScanner - [client:400205]scan file in current open file directory(C:/xampp/htdocs/webpra/SemisterTest)
+2025-12-09 00:00:59.558 [pool-3-thread-1] INFO  com.rs.mv.mvvs.client.catalog.from.scan.CurrentPathScanner - [client:400205]scan file in current open file directory(C:/xampp/htdocs/webpra/SemisterTest)
+2025-12-09 00:01:16.666 [pool-3-thread-1] INFO  com.rs.mv.mvvs.client.catalog.from.scan.CurrentPathScanner - [client:400205]scan file in current open file directory(C:/xampp/htdocs/webpra/SemisterTest)
+2025-12-09 00:02:02.775 [pool-3-thread-1] INFO  com.rs.mv.mvvs.client.catalog.from.scan.CurrentPathScanner - [client:400205]scan file in current open file directory(C:/xampp/htdocs/webpra/SemisterTest)
+2025-12-09 16:47:49.774 [pool-3-thread-1] INFO  com.rs.mv.mvvs.client.catalog.from.scan.CurrentPathScanner - [client:400205]scan file in current open file directory(C:/xampp/htdocs/webpra/SemisterTest)

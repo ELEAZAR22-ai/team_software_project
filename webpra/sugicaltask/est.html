@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticket Booking System</title>
+    <style>
+        :root {
+            --primary: #1e88e5;
+            --primary-dark: #0be63a;
+            --bg: #12b3fd;
+            --card: #c9e915;
+            --muted: #6b7280;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --seat: #e5e7eb;
+            --seat-booked: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: #111
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 1fr 1fr
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+            padding: 16px
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 8px
+        }
+
+        label {
+            display: block;
+            font-size: .9rem;
+            margin-bottom: 6px
+        }
+
+        select,
+        input,
+        button {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            width: 100%
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .field {
+            flex: 1 1 200px
+        }
+
+        .summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .seat-map {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+            padding: 6px
+        }
+
+        .seat {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid #999;
+            background: var(--seat);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px
+        }
+
+        .seat.unavailable {
+            background: #d1d5db;
+            cursor: not-allowed;
+            text-decoration: line-through
+        }
+
+        .seat.booked {
+            background: var(--seat-booked);
+            border-color: #8b949e;
+            cursor: not-allowed
+        }
+
+        .seat.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-dark)
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        .table th,
+        .table td {
+            border-bottom: 1px solid #eee;
+            padding: 8px;
+            text-align: left
+        }
+
+        .btn {
+            cursor: pointer;
+            border: 0;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            padding: 10px 14px
+        }
+
+        .btn.secondary {
+            background: #e5e7eb;
+            color: #111;
+            border: 1px solid #d1d5db
+        }
+
+        .btn.danger {
+            background: var(--danger)
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e6ff07;
+            color: #1d0fe4;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: .85rem;
+            font-weight: 600;
+        }
+
+        .receipt {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px;
+            background: #fff
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .total {
+            font-weight: 700;
+            font-size: 1.05rem
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Ticket Booking System</h1>
+
+        <div class="grid">
+            <!-- Booking Form -->
+            <section class="card" aria-label="Booking Form">
+                <div class="section-title">1. Route & Passengers</div>
+
+                <div class="row" style="gap:12px;align-items:stretch">
+                    <div class="field" style="min-width:240px">
+                        <label for="route">Route</label>
+                        <select id="route" required>
+                            <option value="" disabled selected>Select route</option>
+                            <option value="City A • City B">City A to City B</option>
+                            <option value="City A • City C">City A to City C</option>
+                            <option value="City B • City D">City B to City D</option>
+                        </select>
+                    </div>
+
+                    <div class="field" style="min-width:180px">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required />
+                    </div>
+
+                    <div class="field" style="min-width:180px">
+                        <label for="passengers">Passengers</label>
+                        <input type="number" id="passengers" min="1" max="7" value="1" required />
+                    </div>
+
+                    <div class="field" style="min-width:180px">
+                        <label for="fare">Fare per seat</label>
+                        <input type="text" id="fare" value="$25.00" readonly />
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="section-title" style="margin-top:6px">2. Seat Reservation</div>
+                <div class="seat-map" id="seatMap" aria-label="Seat map">
+                    <!-- 8 columns x 4 rows -->
+                    <!-- Seats will be generated by JS -->
+                </div>
+                <div class="row" style="justify-content:flex-start;margin-top:6px">
+                    <span class="badge" id="selectedCount">0 seats selected</span>
+                </div>
+            </section>
+
+            <!-- Summary & Actions -->
+            <section class="card summary" aria-label="Booking Summary">
+                <div class="section-title">3. Summary</div>
+                <div id="summaryDetails">
+                    <div><strong>Route:</strong> <span id="summaryRoute">—</span></div>
+                    <div><strong>Date:</strong> <span id="summaryDate">—</span></div>
+                    <div><strong>Seats:</strong> <span id="summarySeats">—</span></div>
+                    <div><strong>Fare per seat:</strong> <span id="summaryFare">$0.00</span></div>
+                    <div class="total"><strong>Total:</strong> $<span id="summaryTotal">0.00</span></div>
+                </div>
+
+                <hr>
+
+                <div class="row" style="gap:8px;justify-content:space-between;align-items:center">
+                    <button class="btn" id="btnProceed" title="Proceed to payment">Proceed to Payment</button>
+                    <button class="btn secondary" id="btnReset" title="Reset form">Reset</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Payment & Receipt -->
+        <section class="card" id="paymentSection" aria-label="Payment" style="margin-top:16px; display:none;">
+            <div class="section-title">4. Payment</div>
+            <div class="row" style="gap:12px;flex-wrap:wrap">
+                <div class="field" style="min-width:240px">
+                    <label for="cardName">Cardholder Name</label>
+                    <input type="text" id="cardName" placeholder="Full name" />
+                </div>
+                <div class="field" style="min-width:240px">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" />
+                </div>
+                <div class="field" style="min-width:180px">
+                    <label for="expiry">Expiry</label>
+                    <input type="text" id="expiry" placeholder="MM/YY" />
+                </div>
+                <div class="field" style="min-width:180px">
+                    <label for="cvv">CVV</label>
+                    <input type="password" id="cvv" placeholder="CVV" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:8px;gap:8px;">
+                <button class="btn" id="btnPay">Pay & Confirm</button>
+                <span id="paymentStatus" class="badge hidden" aria-live="polite"></span>
+            </div>
+
+            <hr>
+
+            <div id="receipt" class="receipt hidden" aria-label="Receipt">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                    <strong>Receipt</strong>
+                    <span class="badge" id="receiptTime"></span>
+                </div>
+                <div id="receiptDetails" style="line-height:1.6"></div>
+            </div>
+        </section>
+
+        <!-- Booking Records -->
+        <section class="card" aria-label="Recent bookings" style="margin-top:16px">
+            <div class="section-title" style="margin-bottom:6px">5. Recent Bookings</div>
+            <table class="table" id="bookingsTable" aria-label="Bookings">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Route</th>
+                        <th>Date</th>
+                        <th>Seats</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingsBody">
+                    <!-- rows added dynamically -->
+                </tbody>
+            </table>
+            <div style="margin-top:8px">
+                <button class="btn secondary" id="btnClearBookings" title="Clear all bookings">Clear All</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Config
+        const SEAT_COLS = 8;
+        const SEAT_ROWS = 4;
+        const BASE_FARE = 25.00;
+
+        // State
+        let selectedSeats = new Set();
+        let bookings = []; // {time, route, date, seats:[], total}
+
+        // Elements
+        const routeEl = document.getElementById('route');
+        const dateEl = document.getElementById('date');
+        const passengersEl = document.getElementById('passengers');
+        const fareEl = document.getElementById('fare');
+        const seatMapEl = document.getElementById('seatMap');
+        const selectedCountEl = document.getElementById('selectedCount');
+        const summaryRoute = document.getElementById('summaryRoute');
+        const summaryDate = document.getElementById('summaryDate');
+        const summarySeats = document.getElementById('summarySeats');
+        const summaryFare = document.getElementById('summaryFare');
+        const summaryTotal = document.getElementById('summaryTotal');
+        const btnProceed = document.getElementById('btnProceed');
+        const btnReset = document.getElementById('btnReset');
+        const paymentSection = document.getElementById('paymentSection');
+        const cardName = document.getElementById('cardName');
+        const cardNumber = document.getElementById('cardNumber');
+        const expiry = document.getElementById('expiry');
+        const cvv = document.getElementById('cvv');
+        const btnPay = document.getElementById('btnPay');
+        const paymentStatus = document.getElementById('paymentStatus');
+        const receipt = document.getElementById('receipt');
+        const receiptTime = document.getElementById('receiptTime');
+        const receiptDetails = document.getElementById('receiptDetails');
+        const bookingsBody = document.getElementById('bookingsBody');
+        const btnClearBookings = document.getElementById('btnClearBookings');
+
+        // Initialize seat map
+        function createSeatElements() {
+            seatMapEl.innerHTML = '';
+            let seatIndex = 0;
+            for (let r = 0; r < SEAT_ROWS; r++) {
+                for (let c = 0; c < SEAT_COLS; c++) {
+                    const seat = document.createElement('div');
+                    seat.className = 'seat';
+                    seat.textContent = String.fromCharCode(65 + r) + (c + 1);
+                    seat.dataset.index = seatIndex;
+                    seat.addEventListener('click', () => toggleSeat(seat));
+                    seatMapEl.appendChild(seat);
+                    seatIndex++;
+                }
+            }
+        }
+
+        function toggleSeat(seatEl) {
+            if (seatEl.classList.contains('unavailable') || seatEl.classList.contains('booked')) return;
+            const idx = seatEl.dataset.index;
+            if (selectedSeats.has(idx)) {
+                selectedSeats.delete(idx);
+                seatEl.classList.remove('selected');
+            } else {
+                selectedSeats.add(idx);
+                seatEl.classList.add('selected');
+            }
+            updateSummary();
+        }
+
+        // Simple price calc
+        function getFarePerSeat() {
+            // Could be dynamic based on route; keep simple for now
+            return BASE_FARE;
+        }
+
+        function updateSummary() {
+            // Update seats display
+            selectedCountEl.textContent = `${selectedSeats.size} seat${selectedSeats.size !== 1 ? 's' : ''} selected`;
+
+            // Update summary details
+            summaryRoute.textContent = routeEl.value || '—';
+            summaryDate.textContent = dateEl.value || '—';
+            const seatsDisplay = Array.from(selectedSeats).sort((a, b) => a - b).map(i => {
+                // Map index back to label: row/col
+                const r = Math.floor(i / SEAT_COLS);
+                const c = (i % SEAT_COLS) + 1;
+                return String.fromCharCode(65 + r) + c;
+            });
+            summarySeats.textContent = seatsDisplay.length ? seatsDisplay.join(', ') : '—';
+            const fare = getFarePerSeat();
+            summaryFare.textContent = `$${fare.toFixed(2)}`;
+            const total = fare * selectedSeats.size;
+            summaryTotal.textContent = total.toFixed(2);
+
+            // Mark seats as booked if previously booked (on reset or simulate)
+            // This demo only marks when booking confirmed.
+        }
+
+        // Booking flow
+        function validateBooking() {
+            const route = routeEl.value;
+            const date = dateEl.value;
+            const passengers = parseInt(passengersEl.value, 10);
+
+            if (!route) return { ok: false, reason: 'Please select a route.' };
+            if (!date) return { ok: false, reason: 'Please pick a date.' };
+            if (!passengers || passengers < 1) return { ok: false, reason: 'Please specify at least 1 passenger.' };
+            if (selectedSeats.size === 0) return { ok: false, reason: 'Please select at least one seat.' };
+            if (passengers !== selectedSeats.size) {
+                // Optional: allow less/more, but keep strict here
+                return { ok: false, reason: 'Number of passengers must equal number of seats selected.' };
+            }
+            return { ok: true };
+        }
+
+        function resetForm() {
+            routeEl.value = '';
+            dateEl.value = '';
+            passengersEl.value = 1;
+            selectedSeats.clear();
+            // Clear seat visuals
+            Array.from(seatMapEl.children).forEach(seat => seat.classList.remove('selected'));
+            updateSummary();
+            // Hide payment/receipt
+            paymentSection.style.display = 'none';
+            receipt.classList.add('hidden');
+            paymentStatus.classList.add('hidden');
+            cardName.value = '';
+            cardNumber.value = '';
+            expiry.value = '';
+            cvv.value = '';
+        }
+
+        function proceedToPayment() {
+            const validation = validateBooking();
+            if (!validation.ok) {
+                alert(validation.reason);
+                return;
+            }
+            paymentSection.style.display = 'block';
+            // Scroll into view for better UX
+            paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function simulatePaymentSuccess() {
+            // Very simple fake payment flow
+            const nameOk = cardName.value.trim().length >= 2;
+            const cardOk = /^\d{12,19}$/.test(cardNumber.value.replace(/\s+/g, '')); // basic check
+            const expiryOk = /^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry.value);
+            const cvvOk = /^\d{3,4}$/.test(cvv.value);
+
+            if (!nameOk || !cardOk || !expiryOk || !cvvOk) {
+                paymentStatus.textContent = 'Payment details are invalid. Please check fields.';
+                paymentStatus.style.background = '#fee2e2';
+                paymentStatus.style.color = '#991b1b';
+                paymentStatus.classList.remove('hidden');
+                return false;
+            }
+
+            // Fake delay
+            paymentStatus.textContent = 'Processing...';
+            paymentStatus.style.background = '#eef2ff';
+            paymentStatus.style.color = '#3730a3';
+            paymentStatus.classList.remove('hidden');
+            setTimeout(() => {
+                paymentStatus.textContent = 'Payment successful!';
+                paymentStatus.style.background = '#dcfce7';
+                paymentStatus.style.color = '#166534';
+                // Finalize booking
+                finalizeBooking();
+            }, 800);
+            return true;
+        }
+
+        function finalizeBooking() {
+            // Create booking record
+            const route = routeEl.value;
+            const date = dateEl.value;
+            const seats = Array.from(selectedSeats).sort((a, b) => a - b);
+            const total = (BASE_FARE * seats.length).toFixed(2);
+            const time = new Date().toLocaleString();
+
+            const booking = {
+                time, route, date, seats: seats.map(i => {
+                    const r = Math.floor(i / SEAT_COLS);
+                    const c = (i % SEAT_COLS) + 1;
+                    return String.fromCharCode(65 + r) + c;
+                }), total
+            };
+
+            bookings.unshift(booking); // latest first
+            renderBookingsTable();
+
+            // Mark seats as booked visually
+            seats.forEach(i => {
+                const seatEl = seatMapEl.querySelector(`.seat[data-index='${i}']`);
+                if (seatEl) seatEl.classList.add('booked');
+            });
+
+            // Show receipt
+            showReceipt(booking);
+
+            // Reset for new booking while keeping history
+            // Keep route/date/fare defaults
+        }
+
+        function showReceipt(booking) {
+            receiptTime.textContent = new Date().toLocaleTimeString();
+            receiptDetails.innerHTML = `
+        <div><strong>Booking Time:</strong> ${booking.time}</div>
+        <div><strong>Route:</strong> ${booking.route}</div>
+        <div><strong>Date:</strong> ${booking.date}</div>
+        <div><strong>Seats:</strong> ${booking.seats.join(', ')}</div>
+        <div><strong>Total Paid:</strong> $${booking.total}</div>
+      `;
+            receipt.classList.remove('hidden');
+            // Also clear payment status
+            paymentStatus.classList.add('hidden');
+            // Reset after successful booking for next
+            setTimeout(() => {
+                // Keep receipt visible for user to view
+            }, 100);
+        }
+
+        function renderBookingsTable() {
+            bookingsBody.innerHTML = '';
+            bookings.forEach(b => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+          <td>${b.time}</td>
+          <td>${b.route}</td>
+          <td>${b.date}</td>
+          <td>${b.seats.join(', ')}</td>
+          <td>$${b.total}</td>
+          <td><span class="badge" style="background:#e6ffea;color:#166534">Booked</span></td>
+        `;
+                bookingsBody.appendChild(tr);
+            });
+        }
+
+        // Event bindings
+        btnProceed.addEventListener('click', proceedToPayment);
+        btnReset.addEventListener('click', () => {
+            resetForm();
+            // Hide receipt if user resets
+            receipt.classList.add('hidden');
+        });
+        btnPay.addEventListener('click', () => {
+            if (simulatePaymentSuccess()) {
+                // After success, disable further edits for this session if desired
+            }
+        });
+        btnClearBookings.addEventListener('click', () => {
+            bookings = [];
+            renderBookingsTable();
+        });
+
+        // Input change listeners to update summary live
+        routeEl.addEventListener('change', updateSummary);
+        dateEl.addEventListener('change', updateSummary);
+        passengersEl.addEventListener('input', updateSummary);
+
+        // Initialize
+        function init() {
+            createSeatElements();
+            updateSummary();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
