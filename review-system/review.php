@@ -22,6 +22,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             <img src="log.png" alt="Logo" class="logo-image">
             <span>Pentecost University</span>
         </div>
+        <nav>
+            <a href="ranking.php" class="nav-link">📊 View Rankings</a>
+        </nav>
         <h1>Lecturer Review</h1>
         <button id="theme-toggle" class="mode-btn" onclick="toggleMode()">🌓 Switch Mode</button>
     </header>

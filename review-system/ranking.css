@@ -1,0 +1,220 @@
+/* Header */
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.logo-image {
+    width: 40px;
+    height: auto;
+}
+
+.main-header {
+    width: 100%;
+    padding: 20px 50px;
+    background-color: #003366;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #ffcc00;
+}
+
+.logo span {
+    display: inline-block;
+}
+
+.main-header h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.nav-link {
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 5px;
+    border: 1px solid #ffcc00;
+    padding: 5px 15px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    background: #ffcc00;
+    color: #003366;
+}
+
+.mode-btn {
+    background: #ffcc00;
+    color: #003366;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.mode-btn:hover {
+    background: #ffe166;
+}
+
+.ranking-view {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+}
+
+.chart-card,
+.guide-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-card {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#lecturerSearch {
+    width: 100%;
+    padding: 15px;
+    border-radius: 30px;
+    border: 2px solid #0055ff;
+    outline: none;
+}
+
+.search-results-dropdown {
+    background: white;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 10px 10px;
+}
+
+.search-item {
+    padding: 10px 20px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.search-item:hover {
+    background-color: #f0f7ff;
+}
+
+/* Importance List Styling */
+.importance-list {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.importance-list li {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: bold;
+}
+
+.importance-list span {
+    background: white;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+}
+
+/* Colors for Importance */
+.high-priority {
+    background-color: #003366;
+    color: rgb(243, 219, 5);
+    border-left: 8px solid #001a33;
+}
+
+/* Deep Blue */
+.medium-priority {
+    background-color: #0055ff;
+    color: rgb(5, 248, 107);
+    border-left: 8px solid #003399;
+}
+
+/* Mid Blue */
+.low-priority {
+    background-color: #ffcc00;
+    color: #003366;
+    border-left: 8px solid #cca300;
+}
+
+/* Yellow */
+
+.dark-mode {
+    background-color: #121628;
+    color: #f4f7ff;
+}
+
+.dark-mode .main-header {
+    background-color: #14213d;
+}
+
+.dark-mode .chart-card,
+.dark-mode .guide-card,
+.dark-mode .search-card,
+.dark-mode .search-results-dropdown {
+    background: #1c2340;
+    color: #f4f7ff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+}
+
+.dark-mode #lecturerSearch {
+    background: #121a33;
+    color: #f4f7ff;
+    border-color: #20315a;
+}
+
+.dark-mode .search-item {
+    border-bottom-color: #2a3152;
+}
+
+.dark-mode .search-item:hover {
+    background-color: #1f2847;
+}
+
+.dark-mode .importance-list span {
+    background: #1c2340;
+    color: #f4f7ff;
+}
+
+.dark-mode .nav-link {
+    background: rgba(255, 204, 0, 0.1);
+}
+
+.dark-mode .mode-btn {
+    background: #ffcc00;
+    color: #003366;
+}
